@@ -5,3 +5,7 @@ SalesApp/Src/SalesApp/SalesApp/Shared/obj/
 SalesApp/Src/SalesApp/SalesApp/Shared/bin/
 SalesApp/Src/SalesApp/SalesApp/Server/bin/
 SalesApp/Src/SalesApp/.vs/
+SalesSolution/Sales.Api/bin/
+SalesSolution/Sales.Api/obj/
+SalesSolution/.vs/
+SalesSolution/Sales.App/obj/
