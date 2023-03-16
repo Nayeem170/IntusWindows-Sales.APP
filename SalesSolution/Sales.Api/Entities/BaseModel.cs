@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Sales.Api.Models
+namespace Sales.Api.Entities
 {
     public class IBaseModel
     {

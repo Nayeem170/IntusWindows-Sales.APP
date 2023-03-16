@@ -1,10 +1,10 @@
-﻿namespace Sales.Api.Models
+﻿namespace Sales.Api.Entities
 {
     public class Order : IBaseModel
     {
         public string Name { get; set; }
         public string State { get; set; }
 
-        public List<Window> Windows { get; set; }
+        public IEnumerable<Window> Windows { get; set; } = new List<Window>();
     }
 }

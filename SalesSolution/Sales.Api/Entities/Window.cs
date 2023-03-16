@@ -1,4 +1,4 @@
-﻿namespace Sales.Api.Models
+﻿namespace Sales.Api.Entities
 {
     public class Window : IBaseModel
     {
@@ -7,6 +7,6 @@
         public Guid OrderId { get; set; }
 
         public Order Order { get; set; }
-        public List<SubElement> SubElements { get; set; }
+        public IEnumerable<SubElement> SubElements { get; set; } = new List<SubElement>();
     }
 }

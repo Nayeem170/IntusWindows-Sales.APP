@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Sales.Api.Models;
+using Sales.Api.Entities;
 
 namespace Sales.Api.Data.Seeds
 {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Sales.Api.Data.Seeds;
-using Sales.Api.Models;
+using Sales.Api.Entities;
 using System.Reflection.Emit;
 
 namespace Sales.Api.Data

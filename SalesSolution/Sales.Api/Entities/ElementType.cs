@@ -1,4 +1,4 @@
-﻿namespace Sales.Api.Models
+﻿namespace Sales.Api.Entities
 {
     public class ElementType : IBaseModel
     {
