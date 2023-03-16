@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using Sales.Api.Data;
+using Sales.Api.Extentions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,9 +10,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContextPool<SalesDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("SalesDBConnection"))
-);
+builder.Services.AddDbContext(builder.Configuration.GetConnectionString("SalesDBConnection"));
+builder.Services.AddRepositories();
+builder.Services.AddServices();
 
 var app = builder.Build();
 
