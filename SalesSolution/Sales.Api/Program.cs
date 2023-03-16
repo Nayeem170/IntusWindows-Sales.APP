@@ -12,6 +12,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext(builder.Configuration.GetConnectionString("SalesDBConnection"));
 builder.Services.AddRepositories();
+builder.Services.AddServices();
 
 var app = builder.Build();
 

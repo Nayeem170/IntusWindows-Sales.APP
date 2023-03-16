@@ -1,5 +1,5 @@
-﻿using Sales.Api.Entities;
-using Sales.Models.DTOs;
+﻿using Sales.DAL.Entities;
+using Sales.Model.DTOs;
 
 namespace Sales.Api.Extentions
 {

@@ -1,21 +1,20 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Sales.Api.Extentions;
-using Sales.Api.Repositories.Contracts;
-using Sales.Models.DTOs;
+using Sales.BLL.Services.Contracts;
+using Sales.Model.DTOs;
 
 namespace Sales.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]s")]
     [ApiController]
     public class OrderController : ControllerBase
     {
-        private readonly IOrderRepository orderRepository;
+        private readonly IOrderService orderService;
 
-        public OrderController(IOrderRepository orderRepository)
+        public OrderController(IOrderService orderService)
         {
-            this.orderRepository = orderRepository;
+            this.orderService = orderService;
         }
 
         [HttpGet]
@@ -23,7 +22,7 @@ namespace Sales.Api.Controllers
         {
             try
             {
-                var orders = await orderRepository.GetOrders();
+                var orders = await orderService.GetOrders();
 
                 if (orders.IsNullOrEmpty())
                 {
@@ -37,7 +36,7 @@ namespace Sales.Api.Controllers
             }
             catch (Exception)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, 
+                return StatusCode(StatusCodes.Status500InternalServerError,
                     "Error retriving data from the database");
             }
         }
@@ -47,7 +46,7 @@ namespace Sales.Api.Controllers
         {
             try
             {
-                var order = await orderRepository.GetOrder(uid);
+                var order = await orderService.GetOrder(uid);
 
                 if (order.IsNull())
                 {

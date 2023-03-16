@@ -12,3 +12,13 @@ SalesSolution/Sales.App/obj/
 SalesSolution/Sales.App/bin/
 SalesSolution/Sales.Models/obj/
 SalesSolution/Sales.Models/bin/
+SalesSolution/Sales.BLL/obj/
+SalesSolution/Sales.DAL/bin/
+SalesSolution/Sales.DAL/obj/
+SalesSolution/Sales.Service/obj/
+SalesSolution/Sales.Service/bin/
+SalesSolution/Sales.Repository/obj/
+SalesSolution/Sales.Model/obj/
+SalesSolution/Sales.Model/bin/
+SalesSolution/Sales.DDL/obj/
+SalesSolution/Sales.BLL/bin/

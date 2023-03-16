@@ -1,7 +1,9 @@
-﻿using Sales.Api.Repositories.Contracts;
-using Sales.Api.Repositories;
-using Sales.Api.Data;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Sales.BLL.Services;
+using Sales.BLL.Services.Contracts;
+using Sales.DAL.Data;
+using Sales.DAL.Repositories;
+using Sales.DAL.Repositories.Contracts;
 
 namespace Sales.Api.Extentions
 {
@@ -20,6 +22,14 @@ namespace Sales.Api.Extentions
             services.AddScoped<IWindowRepository, WindowRepository>();
             services.AddScoped<ISubElementRepository, SubElementRepository>();
             services.AddScoped<IElementTypeRepository, ElementTypeRepository>();
+        }
+
+        public static void AddServices(this IServiceCollection services)
+        {
+            services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IWindowService, WindowService>();
+            services.AddScoped<ISubElementService, SubElementService>();
+            services.AddScoped<IElementTypeService, ElementTypeService>();
         }
     }
 }

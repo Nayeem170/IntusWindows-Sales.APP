@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -16,7 +16,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Sales.Models\Sales.Models.csproj" />
+    <ProjectReference Include="..\Sales.BLL\Sales.BLL.csproj" />
+    <ProjectReference Include="..\Sales.DAL\Sales.DAL.csproj" />
+    <ProjectReference Include="..\Sales.Model\Sales.Model.csproj" />
   </ItemGroup>
 
 </Project>

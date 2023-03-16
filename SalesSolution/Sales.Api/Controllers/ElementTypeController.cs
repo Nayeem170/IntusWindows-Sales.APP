@@ -1,22 +1,20 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Sales.Api.Extentions;
-using Sales.Api.Repositories;
-using Sales.Api.Repositories.Contracts;
-using Sales.Models.DTOs;
+using Sales.BLL.Services.Contracts;
+using Sales.Model.DTOs;
 
 namespace Sales.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]s")]
     [ApiController]
     public class ElementTypeController : ControllerBase
     {
-        private readonly IElementTypeRepository elementTypeRepository;
+        private readonly IElementTypeService elementTypeService;
 
-        public ElementTypeController(IElementTypeRepository elementTypeRepository)
+        public ElementTypeController(IElementTypeService elementTypeService)
         {
-            this.elementTypeRepository = elementTypeRepository;
+            this.elementTypeService = elementTypeService;
         }
 
         [HttpGet]
@@ -24,7 +22,7 @@ namespace Sales.Api.Controllers
         {
             try
             {
-                var elementTypes = await elementTypeRepository.GetElementTypes();
+                var elementTypes = await elementTypeService.GetElementTypes();
 
                 if (elementTypes.IsNullOrEmpty())
                 {
@@ -48,7 +46,7 @@ namespace Sales.Api.Controllers
         {
             try
             {
-                var elementType = await elementTypeRepository.GetElementType(uid);
+                var elementType = await elementTypeService.GetElementType(uid);
 
                 if (elementType.IsNull())
                 {

@@ -1,23 +1,21 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using Sales.Api.Entities;
 using Sales.Api.Extentions;
-using Sales.Api.Repositories;
-using Sales.Api.Repositories.Contracts;
-using Sales.Models.DTOs;
+using Sales.BLL.Services.Contracts;
+using Sales.DAL.Entities;
+using Sales.Model.DTOs;
 
 namespace Sales.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]s")]
     [ApiController]
     public class SubElementController : ControllerBase
     {
-        private readonly ISubElementRepository subElementRepository;
+        private readonly ISubElementService subElementService;
 
-        public SubElementController(ISubElementRepository subElementRepository)
+        public SubElementController(ISubElementService subElementService)
         {
-            this.subElementRepository = subElementRepository;
+            this.subElementService = subElementService;
         }
 
         [HttpGet]
@@ -25,7 +23,7 @@ namespace Sales.Api.Controllers
         {
             try
             {
-                var subElements = await subElementRepository.GetSubElements();
+                var subElements = await subElementService.GetSubElements();
 
                 if (subElements.IsNullOrEmpty())
                 {
@@ -49,7 +47,7 @@ namespace Sales.Api.Controllers
         {
             try
             {
-                var subElement = await subElementRepository.GetSubElement(uid);
+                var subElement = await subElementService.GetSubElement(uid);
 
                 if (subElement.IsNull())
                 {

@@ -1,22 +1,20 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Sales.Api.Extentions;
-using Sales.Api.Repositories;
-using Sales.Api.Repositories.Contracts;
-using Sales.Models.DTOs;
+using Sales.BLL.Services.Contracts;
+using Sales.Model.DTOs;
 
 namespace Sales.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]s")]
     [ApiController]
     public class WindowController : ControllerBase
     {
-        private readonly IWindowRepository windowRepository;
+        private readonly IWindowService windowService;
 
-        public WindowController(IWindowRepository windowRepository)
+        public WindowController(IWindowService windowService)
         {
-            this.windowRepository = windowRepository;
+            this.windowService = windowService;
         }
 
         [HttpGet]
@@ -24,7 +22,7 @@ namespace Sales.Api.Controllers
         {
             try
             {
-                var windows = await windowRepository.GetWindows();
+                var windows = await windowService.GetWindows();
 
                 if (windows.IsNullOrEmpty())
                 {
@@ -48,7 +46,7 @@ namespace Sales.Api.Controllers
         {
             try
             {
-                var window = await windowRepository.GetWindow(uid);
+                var window = await windowService.GetWindow(uid);
 
                 if (window.IsNull())
                 {
