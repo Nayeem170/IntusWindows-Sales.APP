@@ -1,4 +1,4 @@
-﻿namespace Sales.Model.DTOs
+﻿namespace Sales.DTO.Models
 {
     public class OrderDTO
     {

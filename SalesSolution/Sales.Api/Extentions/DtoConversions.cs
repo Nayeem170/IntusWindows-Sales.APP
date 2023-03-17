@@ -1,7 +1,7 @@
 ﻿using Sales.DAL.Entities;
-using Sales.Model.DTOs;
+using Sales.DTO.Models;
 
-namespace Sales.Api.Extentions
+namespace Sales.API.Extentions
 {
     public static class DtoConversions
     {

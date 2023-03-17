@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using Sales.Api.Extentions;
+using Sales.API.Extentions;
 
 var builder = WebApplication.CreateBuilder(args);
 

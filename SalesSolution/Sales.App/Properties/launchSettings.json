@@ -8,7 +8,7 @@
     }
   },
   "profiles": {
-    "Sales.App": {
+    "Sales.APP": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,

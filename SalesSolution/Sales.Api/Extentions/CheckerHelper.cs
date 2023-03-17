@@ -1,4 +1,4 @@
-﻿namespace Sales.Api.Extentions
+﻿namespace Sales.API.Extentions
 {
     public static class CheckerHelper
     {
