@@ -1,0 +1,21 @@
+﻿@inherits OrderTableBase
+
+<h3 class="mb-5">All Orders</h3>
+
+<p>
+    <MatTextField @bind-Value="@OrderSearchText" Label="Search" Icon="search"></MatTextField>
+</p>
+
+<MatTable Items="@DisplayedOrders" class="mat-elevation-z5" AllowSelection="true" Striped="true" UseSortHeaderRow="true" OnRowDbClick="OnRowDbClick">
+    <MatTableHeader>
+        <MatSortHeaderRow SortChanged="@SortData">
+            <MatSortHeader SortId="state">State</MatSortHeader>
+            <MatSortHeader SortId="name">Name</MatSortHeader>
+        </MatSortHeaderRow>
+    </MatTableHeader>
+    <MatTableRow>
+        <td>@context.State</td>
+        <td>@context.Name</td>
+    </MatTableRow>
+</MatTable>
+<p></p>
