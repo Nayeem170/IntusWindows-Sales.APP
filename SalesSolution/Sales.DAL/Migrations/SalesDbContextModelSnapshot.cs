@@ -22,7 +22,7 @@ namespace Sales.DAL.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Sales.Api.Models.ElementType", b =>
+            modelBuilder.Entity("Sales.API.Models.ElementType", b =>
                 {
                     b.Property<Guid>("UId")
                         .ValueGeneratedOnAdd()
@@ -59,7 +59,7 @@ namespace Sales.DAL.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Sales.Api.Models.Order", b =>
+            modelBuilder.Entity("Sales.API.Models.Order", b =>
                 {
                     b.Property<Guid>("UId")
                         .ValueGeneratedOnAdd()
@@ -102,7 +102,7 @@ namespace Sales.DAL.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Sales.Api.Models.SubElement", b =>
+            modelBuilder.Entity("Sales.API.Models.SubElement", b =>
                 {
                     b.Property<Guid>("UId")
                         .ValueGeneratedOnAdd()
@@ -219,7 +219,7 @@ namespace Sales.DAL.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Sales.Api.Models.Window", b =>
+            modelBuilder.Entity("Sales.API.Models.Window", b =>
                 {
                     b.Property<Guid>("UId")
                         .ValueGeneratedOnAdd()
@@ -282,15 +282,15 @@ namespace Sales.DAL.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Sales.Api.Models.SubElement", b =>
+            modelBuilder.Entity("Sales.API.Models.SubElement", b =>
                 {
-                    b.HasOne("Sales.Api.Models.ElementType", "ElementType")
+                    b.HasOne("Sales.API.Models.ElementType", "ElementType")
                         .WithMany()
                         .HasForeignKey("ElementTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Sales.Api.Models.Window", "Window")
+                    b.HasOne("Sales.API.Models.Window", "Window")
                         .WithMany("SubElements")
                         .HasForeignKey("WindowId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -301,9 +301,9 @@ namespace Sales.DAL.Migrations
                     b.Navigation("Window");
                 });
 
-            modelBuilder.Entity("Sales.Api.Models.Window", b =>
+            modelBuilder.Entity("Sales.API.Models.Window", b =>
                 {
-                    b.HasOne("Sales.Api.Models.Order", "Order")
+                    b.HasOne("Sales.API.Models.Order", "Order")
                         .WithMany("Windows")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -312,12 +312,12 @@ namespace Sales.DAL.Migrations
                     b.Navigation("Order");
                 });
 
-            modelBuilder.Entity("Sales.Api.Models.Order", b =>
+            modelBuilder.Entity("Sales.API.Models.Order", b =>
                 {
                     b.Navigation("Windows");
                 });
 
-            modelBuilder.Entity("Sales.Api.Models.Window", b =>
+            modelBuilder.Entity("Sales.API.Models.Window", b =>
                 {
                     b.Navigation("SubElements");
                 });

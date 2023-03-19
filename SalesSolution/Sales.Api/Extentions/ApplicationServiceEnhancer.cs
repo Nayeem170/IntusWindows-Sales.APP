@@ -5,7 +5,7 @@ using Sales.DAL.Data;
 using Sales.DAL.Repositories;
 using Sales.DAL.Repositories.Contracts;
 
-namespace Sales.Api.Extentions
+namespace Sales.API.Extentions
 {
     public static class ApplicationServiceEnhancer
     {

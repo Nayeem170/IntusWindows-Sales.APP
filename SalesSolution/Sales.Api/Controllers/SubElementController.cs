@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using Sales.Api.Extentions;
+using Sales.API.Extentions;
 using Sales.BLL.Services.Contracts;
 using Sales.DAL.Entities;
-using Sales.Model.DTOs;
+using Sales.DTO.Models;
 
-namespace Sales.Api.Controllers
+namespace Sales.API.Controllers
 {
     [Route("api/[controller]s")]
     [ApiController]
