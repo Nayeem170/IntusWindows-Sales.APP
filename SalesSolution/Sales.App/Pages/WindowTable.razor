@@ -1,0 +1,23 @@
+﻿@inherits WindowTableBase
+
+<h3 class="mb-5">Windows of "@Order.Name (@Order.State)" order</h3>
+
+<p>
+    <MatTextField @bind-Value="@WindowSearchText" Label="Search" Icon="search"></MatTextField>
+</p>
+
+<MatTable Items="@DisplayedWindows" class="mat-elevation-z5" AllowSelection="true" Striped="true" UseSortHeaderRow="true" OnRowDbClick="OnRowDbClick">
+    <MatTableHeader>
+        <MatSortHeaderRow SortChanged="@SortData">
+            <MatSortHeader SortId="name">Name</MatSortHeader>
+            <MatSortHeader SortId="quantity-of-windows">Quantity</MatSortHeader>
+            <MatSortHeader SortId="total-sub-elements"># Sub Elements</MatSortHeader>
+        </MatSortHeaderRow>
+    </MatTableHeader>
+    <MatTableRow>
+        <td>@context.Name</td>
+        <td>@context.Quantity</td>
+        <td>@context.SubElements.Sum(element => element.Quantity)</td>
+    </MatTableRow>
+</MatTable>
+<p></p>

@@ -1,0 +1,29 @@
+﻿@page "/"
+@inherits OrderBase
+
+@if (Orders == null)
+{
+    <h3>Loading orders...</h3>
+}
+else
+{
+    <OrderTable Orders="Orders" OnOrderSelected="ShowWindows"></OrderTable>
+}
+
+@if (CurrentSelectedOrder == null)
+{
+    <h3>Loading windows...</h3>
+}
+else
+{
+    <WindowTable Order="CurrentSelectedOrder" OnWindowSelected="ShowSubElements"></WindowTable>
+}
+
+@if (CurrentSelectedWindow == null)
+{
+    <h3>Loading sub elements...</h3>
+}
+else
+{
+    <SubElementTable Window="CurrentSelectedWindow"></SubElementTable>
+}

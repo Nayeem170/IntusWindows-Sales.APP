@@ -1,0 +1,27 @@
+﻿@inherits SubElementTableBase
+
+<h3 class="mb-5">Sub elements of "@Window.Name" window</h3>
+
+<p>
+    <MatTextField @bind-Value="@SubElementSearchText" Label="Search" Icon="search"></MatTextField>
+</p>
+
+<MatTable Items="@DisplayedSubElements" class="mat-elevation-z5" Striped="true" UseSortHeaderRow="true">
+    <MatTableHeader>
+        <MatSortHeaderRow SortChanged="@SortData">
+            <MatSortHeader SortId="element">Element</MatSortHeader>
+            <MatSortHeader SortId="element-type">Type</MatSortHeader>
+            <MatSortHeader SortId="width">Width</MatSortHeader>
+            <MatSortHeader SortId="height">Height</MatSortHeader>
+            <MatSortHeader SortId="quantity">Quantity</MatSortHeader>
+        </MatSortHeaderRow>
+    </MatTableHeader>
+    <MatTableRow>
+        <td>@context.Element</td>
+        <td>@context.ElementTypeName</td>
+        <td>@context.Width</td>
+        <td>@context.Height</td>
+        <td>@context.Quantity</td>
+    </MatTableRow>
+</MatTable>
+<p></p>

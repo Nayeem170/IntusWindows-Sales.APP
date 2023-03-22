@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Sales.DAL\Sales.DAL.csproj" />
-    <ProjectReference Include="..\Sales.Repository\Sales.DAL.csproj" />
   </ItemGroup>
 
 </Project>
