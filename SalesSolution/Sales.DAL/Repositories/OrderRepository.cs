@@ -18,11 +18,17 @@ namespace Sales.DAL.Repositories
         public async Task<IEnumerable<Order>> GetOrders()
         {
             return await salesDbContext.Orders
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Order>> GetOrdersIncludeAll()
+        {
+            return await salesDbContext.Orders
                 .IncludeAll()
                 .ToListAsync();
         }
 
-        public async Task<Order?> GetOrder(Guid uid)
+        public async Task<Order?> GetOrderIncludeAll(Guid uid)
         {
             return await salesDbContext.Orders
                 .Where(order => order.UId == uid)
