@@ -2,6 +2,10 @@
 {
     public class OrderDTO
     {
+        public OrderDTO()
+        {
+            UId = new Guid();
+        }
         public Guid UId { get; set; }
         public string Name { get; set; }
         public string State { get; set; }

@@ -4,6 +4,7 @@
 
 <p>
     <MatTextField @bind-Value="@OrderSearchText" Label="Search" Icon="search"></MatTextField>
+    <MatButton Outlined="true" OnClick="@OpenAddOrderDialogue" Icon="add" Style="float: right; color: darkblue">Add</MatButton>
 </p>
 
 <MatTable Items="@DisplayedOrders" class="mat-elevation-z5" AllowSelection="true" Striped="true" UseSortHeaderRow="true" OnRowDbClick="OnRowDbClick">
@@ -11,11 +12,21 @@
         <MatSortHeaderRow SortChanged="@SortData">
             <MatSortHeader SortId="state">State</MatSortHeader>
             <MatSortHeader SortId="name">Name</MatSortHeader>
+            <MatSortHeader SortId="action">Action</MatSortHeader>
         </MatSortHeaderRow>
     </MatTableHeader>
     <MatTableRow>
         <td>@context.State</td>
         <td>@context.Name</td>
+        <td>
+            <MatButton Outlined="true" OnClick="@EditAOrder" Icon="edit" Style="color: darkorange">Edit</MatButton>
+            <MatButton Outlined="true" OnClick="@DeleteAOrder" Icon="delete" Style="color: darkred">Delete</MatButton>
+        </td>
     </MatTableRow>
 </MatTable>
 <p></p>
+<OrderDialog Order="@Order"
+             ActionType="@ActionType"
+             DialogIsOpen="@DialogIsOpen"
+             OnSave="@OnSave"
+             OnCancel="@OnCancel"></OrderDialog>

@@ -1,0 +1,17 @@
+﻿@inherits OrderDialogBase
+
+<MatDialog @bind-IsOpen="@DialogIsOpen" CanBeClosed=false>
+    <MatDialogTitle>@ActionType Order</MatDialogTitle>
+    <MatDialogContent>
+        <p>
+            <MatTextField @bind-Value="@Order.State" Label="State" Style="width:500px;"></MatTextField>
+        </p>
+        <p>
+            <MatTextField @bind-Value="@Order.Name" Label="Name" Style="width:500px;"></MatTextField>
+        </p>
+    </MatDialogContent>
+    <MatDialogActions>
+        <MatButton Outlined=true OnClick="@OnCancel" Style="color:darkorange">Cancel</MatButton>&nbsp;
+        <MatButton Outlined=true OnClick="@OnSave" Style="color:darkgreen">Save</MatButton>
+    </MatDialogActions>
+</MatDialog>

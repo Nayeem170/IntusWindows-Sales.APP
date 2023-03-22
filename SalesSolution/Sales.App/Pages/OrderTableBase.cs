@@ -1,5 +1,6 @@
 ﻿using MatBlazor;
 using Microsoft.AspNetCore.Components;
+using Sales.APP.Enums;
 using Sales.DTO.Models;
 using System;
 using System.ComponentModel;
@@ -14,6 +15,10 @@ namespace Sales.APP.Pages
         public IEnumerable<OrderDTO> Orders { get; set; }
         [Parameter]
         public EventCallback<OrderDTO> OnOrderSelected { get; set; }
+
+        public OrderDTO Order { get; set; } = new OrderDTO();
+        public string ActionType { get; set; } = FormActionType.Add;
+        public bool DialogIsOpen { get; set; } = false;
 
         protected override async Task OnInitializedAsync()
         {
@@ -79,6 +84,43 @@ namespace Sales.APP.Pages
         {
             _currentSelectedOrder = item as OrderDTO;
             OnOrderSelected.InvokeAsync(_currentSelectedOrder);
+        }
+
+        public void OpenAddOrderDialogue()
+        {
+            Order = new OrderDTO();
+            ActionType = FormActionType.Add;
+            DialogIsOpen = true;
+        }
+
+        public void EditAOrder()
+        {
+            Console.WriteLine("Update a order");
+        }
+
+        public void DeleteAOrder()
+        {
+            Console.WriteLine("Delete a order");
+        }
+
+        public void SaveAOrder()
+        {
+            Console.WriteLine("Update a order");
+        }
+
+        public void CancelAOrder()
+        {
+            Console.WriteLine("Delete a order");
+        }
+
+        protected void OnSave()
+        {
+            DialogIsOpen = false;
+        }
+
+        protected void OnCancel()
+        {
+            DialogIsOpen = false;
         }
     }
 }
