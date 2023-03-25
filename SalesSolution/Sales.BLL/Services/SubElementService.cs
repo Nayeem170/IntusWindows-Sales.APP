@@ -17,9 +17,14 @@ namespace Sales.BLL.Services
             return await subElementRepository.GetSubElements();
         }
 
-        public async Task<SubElement?> GetSubElement(Guid uid)
+        public async Task<IEnumerable<SubElement>> GetSubElements(Guid windowId)
         {
-            return await subElementRepository.GetSubElement(uid);
+            return await subElementRepository.GetSubElements(windowId);
+        }
+
+        public async Task<SubElement?> GetSubElement(Guid windowId)
+        {
+            return await subElementRepository.GetSubElement(windowId);
         }
     }
 }

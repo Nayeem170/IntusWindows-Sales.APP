@@ -14,9 +14,18 @@ namespace Sales.DAL.Repositories
         {
             this.salesDbContext = salesDbContext;
         }
+
         public async Task<IEnumerable<SubElement>> GetSubElements()
         {
             return await salesDbContext.SubElements
+                .IncludeAll()
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<SubElement>> GetSubElements(Guid windowId)
+        {
+            return await salesDbContext.SubElements
+                .Where(subElement => subElement.WindowId == windowId)
                 .IncludeAll()
                 .ToListAsync();
         }

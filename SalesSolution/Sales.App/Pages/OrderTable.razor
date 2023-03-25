@@ -1,21 +1,41 @@
 ﻿@inherits OrderTableBase
 
-<h3 class="mb-5">All Orders</h3>
-
 <p>
     <MatTextField @bind-Value="@OrderSearchText" Label="Search" Icon="search"></MatTextField>
+    <MatButton Outlined="true" OnClick="@OpenAddOrderDialogue" Icon="add" Style="color: darkblue" Class="float-right">Add</MatButton>
 </p>
 
-<MatTable Items="@DisplayedOrders" class="mat-elevation-z5" AllowSelection="true" Striped="true" UseSortHeaderRow="true" OnRowDbClick="OnRowDbClick">
+<MatTable   Items="@DisplayedOrders" 
+            AllowSelection="true" 
+            Striped="true" 
+            UseSortHeaderRow="true"
+            OnRowDbClick="OnRowDbClick"
+            PageSize="10"
+            class="mat-elevation-z5">
     <MatTableHeader>
         <MatSortHeaderRow SortChanged="@SortData">
             <MatSortHeader SortId="state">State</MatSortHeader>
             <MatSortHeader SortId="name">Name</MatSortHeader>
+            <MatSortHeader SortId="action">Action</MatSortHeader>
         </MatSortHeaderRow>
     </MatTableHeader>
     <MatTableRow>
         <td>@context.State</td>
         <td>@context.Name</td>
+        <td>
+            <MatButton Outlined="true" OnClick="@(_ => OpenEditOrderDialogue(@context))" Icon="edit" Style="color: darkorange">Edit</MatButton>
+            <MatButton Outlined="true" OnClick="@(_ => OpenDeleteOrderPopupAsync(@context))" Icon="delete" Style="color: darkred">Delete</MatButton>
+        </td>
     </MatTableRow>
 </MatTable>
 <p></p>
+<OrderDialog OrderDialogueModel="@OrderDialogueModel"
+             OnSave="@OnSaveAsync"
+             OnCancel="@OnCancel"></OrderDialog>
+
+<style>
+    .float-right
+    {
+        float: right;
+    }    
+</style>

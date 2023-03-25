@@ -8,6 +8,8 @@ namespace Sales.APP.Extentions
         public static void AddServices(this IServiceCollection services)
         {
             services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IWindowService, WindowService>();
+            services.AddScoped<ISubElementService, SubElementService>();
         }
     }
 }

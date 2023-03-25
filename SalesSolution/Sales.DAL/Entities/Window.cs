@@ -1,6 +1,6 @@
 ﻿namespace Sales.DAL.Entities
 {
-    public class Window : IBaseModel
+    public class Window : BaseModel
     {
         public string Name { get; set; }
         public int Quantity { get; set; }

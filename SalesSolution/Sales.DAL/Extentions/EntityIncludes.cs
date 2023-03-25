@@ -22,6 +22,13 @@ namespace Sales.DAL.Extentions
                 .AsQueryable();
         }
 
+        public static IQueryable<Window> IncludeSubElement(this IQueryable<Window> windows)
+        {
+            return windows
+                .Include(window => window.SubElements)
+                .AsQueryable();
+        }
+
         public static IQueryable<SubElement> IncludeAll(this IQueryable<SubElement> subElements)
         {
             return subElements

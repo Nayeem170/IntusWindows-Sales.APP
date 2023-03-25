@@ -1,6 +1,6 @@
 ﻿namespace Sales.DAL.Entities
 {
-    public class SubElement : IBaseModel
+    public class SubElement : BaseModel
     {
         public int Element { get; set; }
         public int Width { get; set; }

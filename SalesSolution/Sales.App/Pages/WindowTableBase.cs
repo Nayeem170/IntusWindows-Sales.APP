@@ -1,40 +1,61 @@
 ﻿using MatBlazor;
 using Microsoft.AspNetCore.Components;
+using Sales.APP.Services.Contract;
 using Sales.DTO.Models;
 
 namespace Sales.APP.Pages
 {
     public class WindowTableBase : ComponentBase
     {
+        [Inject]
+        public IWindowService WindowService { get; set; }
         [Parameter]
-        public OrderDTO Order { get; set; }
+        public IEnumerable<WindowDTO> Windows { get; set; }
         [Parameter]
         public EventCallback<WindowDTO> OnWindowSelected { get; set; }
 
-        protected IEnumerable<WindowDTO> DisplayedWindows = null;
-
+        protected IEnumerable<WindowDTO> DisplayedWindows = new List<WindowDTO>();
+        public IEnumerable<WindowDTO> OldWindows { get; set; }
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
-            DisplayedWindows = Order.Windows;
-            SortData(null);
-            await OnWindowSelected.InvokeAsync(DisplayedWindows.First());
+
+            OldWindows = Windows;
+            DisplayedWindows = Windows;
+            WindowSearchText = string.Empty;
         }
 
-        private bool shouldUpdate = true;
+        private bool shouldUpdate()
+        {
+            if (OldWindows.Count() != Windows.Count())
+            {
+                return true;
+            }
+
+            var bothEquals = OldWindows.OrderBy(old => old.UId)
+                    .ThenBy(old => old.UpdatedAt)
+                .SequenceEqual(Windows.OrderBy(current => current.UId)
+                    .ThenBy(current => current.UpdatedAt));
+
+            return !bothEquals;
+        }
+
         protected override async Task OnParametersSetAsync()
         {
             await base.OnParametersSetAsync();
 
-            if (shouldUpdate)
+            if (shouldUpdate())
             {
-                DisplayedWindows = Order.Windows;
+                OldWindows = Windows;
+                DisplayedWindows = Windows;
                 WindowSearchText = string.Empty;
             }
-            else
-            {
-                shouldUpdate = true;
-            }
+        }
+
+        protected async Task OnRowDbClickAsync(object item)
+        {
+            var currentSelectedWindow = item as WindowDTO;
+            await OnWindowSelected.InvokeAsync(currentSelectedWindow);
         }
 
         private string _windowSearchText;
@@ -53,11 +74,11 @@ namespace Sales.APP.Pages
         {
             if (string.IsNullOrEmpty(text))
             {
-                DisplayedWindows = Order.Windows;
+                DisplayedWindows = Windows;
             }
             else
             {
-                DisplayedWindows = Order.Windows.Where(order =>
+                DisplayedWindows = Windows.Where(order =>
                     order.Name.Contains(text, StringComparison.OrdinalIgnoreCase) ||
                     order.Quantity.ToString().Contains(text, StringComparison.OrdinalIgnoreCase));
             }
@@ -70,37 +91,29 @@ namespace Sales.APP.Pages
 
                 if (sort.SortId == "name" && sort.Direction == MatSortDirection.Asc)
                 {
-                    DisplayedWindows = Order.Windows.OrderBy(order => order.Name);
+                    DisplayedWindows = Windows.OrderBy(order => order.Name);
                 }
                 else if (sort.SortId == "name" && sort.Direction == MatSortDirection.Desc)
                 {
-                    DisplayedWindows = Order.Windows.OrderByDescending(order => order.Name);
+                    DisplayedWindows = Windows.OrderByDescending(order => order.Name);
                 }
                 else if (sort.SortId == "quantity-of-windows" && sort.Direction == MatSortDirection.Asc)
                 {
-                    DisplayedWindows = Order.Windows.OrderBy(order => order.Quantity);
+                    DisplayedWindows = Windows.OrderBy(order => order.Quantity);
                 }
                 else if (sort.SortId == "quantity-of-windows" && sort.Direction == MatSortDirection.Desc)
                 {
-                    DisplayedWindows = Order.Windows.OrderByDescending(order => order.Quantity);
+                    DisplayedWindows = Windows.OrderByDescending(order => order.Quantity);
                 }
                 else if (sort.SortId == "total-sub-elements" && sort.Direction == MatSortDirection.Asc)
                 {
-                    DisplayedWindows = Order.Windows.OrderBy(order => order.SubElements.Sum(element => element.Quantity));
+                    DisplayedWindows = Windows.OrderBy(order => order.SubElements.Sum(element => element.Quantity));
                 }
                 else if (sort.SortId == "total-sub-elements" && sort.Direction == MatSortDirection.Desc)
                 {
-                    DisplayedWindows = Order.Windows.OrderByDescending(order => order.SubElements.Sum(element => element.Quantity));
+                    DisplayedWindows = Windows.OrderByDescending(order => order.SubElements.Sum(element => element.Quantity));
                 }
             }
-        }
-
-        private WindowDTO _currentSelectedWindow = null;
-        protected void OnRowDbClick(object item)
-        {
-            _currentSelectedWindow = item as WindowDTO;
-            OnWindowSelected.InvokeAsync(_currentSelectedWindow);
-            shouldUpdate = false;
         }
     }
 }

@@ -14,4 +14,15 @@ builder.Services.AddServices();
 
 builder.Services.AddMatBlazor();
 
+builder.Services.AddMatToaster(config =>
+{
+    config.Position = MatToastPosition.BottomRight;
+    config.PreventDuplicates = true;
+    config.NewestOnTop = true;
+    config.ShowCloseButton = true;
+    config.MaximumOpacity = 95;
+    config.VisibleStateDuration = 3000;
+    config.Position = MatToastPosition.TopRight;
+});
+
 await builder.Build().RunAsync();

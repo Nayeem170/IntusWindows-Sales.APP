@@ -1,29 +1,40 @@
 ﻿@page "/"
+
 @inherits OrderBase
 
-@if (Orders == null)
-{
-    <h3>Loading orders...</h3>
-}
-else
-{
-    <OrderTable Orders="Orders" OnOrderSelected="ShowWindows"></OrderTable>
-}
+<div class="mat-layout-grid">
+    <div class="mat-layout-grid-inner">
+        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
+            @if (Orders.IsNull())
+            {
+                <h3>Loading orders...</h3>
+            }
+            else
+            {
+                <h3 class="mb-5">All Orders</h3>
+                <OrderTable Orders="Orders" OnOrderSelected="ShowWindowsAsync" OnChange="OnOrderChangeAsync"></OrderTable>
+            }
+        </div>
+        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
+            @if (Windows.IsNull())
+            {
+                <h3>Loading windows...</h3>
+            }
+            else
+            {
+                <h3 class="mb-5">Windows of selected Order</h3>
+                <WindowTable Windows="Windows" OnWindowSelected="ShowSubElementsAsync"></WindowTable>
+            }
 
-@if (CurrentSelectedOrder == null)
-{
-    <h3>Loading windows...</h3>
-}
-else
-{
-    <WindowTable Order="CurrentSelectedOrder" OnWindowSelected="ShowSubElements"></WindowTable>
-}
-
-@if (CurrentSelectedWindow == null)
-{
-    <h3>Loading sub elements...</h3>
-}
-else
-{
-    <SubElementTable Window="CurrentSelectedWindow"></SubElementTable>
-}
+            @if (SubElements == null)
+            {
+                <h3>Loading sub elements...</h3>
+            }
+            else
+            {
+                <h3 class="mb-5">Sub elements of selected Window</h3>
+                <SubElementTable SubElements="SubElements"></SubElementTable>
+            }
+        </div>
+    </div>
+</div>

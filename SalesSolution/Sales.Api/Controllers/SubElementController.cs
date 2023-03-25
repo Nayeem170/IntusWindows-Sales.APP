@@ -4,6 +4,7 @@ using Sales.API.Extentions;
 using Sales.BLL.Services.Contracts;
 using Sales.DAL.Entities;
 using Sales.DTO.Models;
+using Sales.LIB.Extentions;
 
 namespace Sales.API.Controllers
 {
@@ -24,6 +25,30 @@ namespace Sales.API.Controllers
             try
             {
                 var subElements = await subElementService.GetSubElements();
+
+                if (subElements.IsNullOrEmpty())
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    var subElementDTOs = subElements.ConvertToDto();
+                    return Ok(subElementDTOs);
+                }
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    "Error retriving data from the database");
+            }
+        }
+
+        [HttpGet("for/{windowId:guid}")]
+        public async Task<ActionResult<IEnumerable<SubElement>>> GetSubElements(Guid windowId)
+        {
+            try
+            {
+                var subElements = await subElementService.GetSubElements(windowId);
 
                 if (subElements.IsNullOrEmpty())
                 {

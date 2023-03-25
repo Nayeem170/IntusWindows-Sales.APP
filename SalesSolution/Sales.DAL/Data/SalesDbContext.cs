@@ -33,6 +33,9 @@ namespace Sales.DAL.Data
                 .Property(b => b.UpdatedAt)
                 .HasDefaultValueSql("getdate()");
 
+            modelBuilder.Entity<Order>()
+                .ToTable(tb => tb.HasTrigger("tr_orders_update"));
+
             modelBuilder.Entity<Window>()
                 .Property(b => b.CreatedAt)
                 .HasDefaultValueSql("getdate()");
@@ -41,6 +44,9 @@ namespace Sales.DAL.Data
                 .Property(b => b.UpdatedAt)
                 .HasDefaultValueSql("getdate()");
 
+            modelBuilder.Entity<Window>()
+                .ToTable(tb => tb.HasTrigger("tr_windows_update"));
+
             modelBuilder.Entity<SubElement>()
                 .Property(b => b.CreatedAt)
                 .HasDefaultValueSql("getdate()");
@@ -48,6 +54,9 @@ namespace Sales.DAL.Data
             modelBuilder.Entity<SubElement>()
                 .Property(b => b.UpdatedAt)
                 .HasDefaultValueSql("getdate()");
+
+            modelBuilder.Entity<SubElement>()
+                .ToTable(tb => tb.HasTrigger("tr_sub_elements_update"));
 
             modelBuilder.Entity<ElementType>()
                 .Property(b => b.CreatedAt)
@@ -60,6 +69,9 @@ namespace Sales.DAL.Data
             modelBuilder.Entity<SubElement>()
                 .Property(b => b.Quantity)
                 .HasDefaultValue(1);
+
+            modelBuilder.Entity<SubElement>()
+                .ToTable(tb => tb.HasTrigger("tr_element_types_update"));
         }
 
         public DbSet<Order> Orders { get; set; }

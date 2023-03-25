@@ -13,13 +13,15 @@ namespace Sales.API.Extentions
                 Name = order.Name,
                 State = order.State,
                 Windows = order.Windows.ConvertToDto(),
+                CreatedAt = order.CreatedAt,
+                UpdatedAt = order.UpdatedAt
             };
         }
 
         public static IEnumerable<OrderDTO> ConvertToDto(this IEnumerable<Order> orders)
         {
             return orders
-                .OrderBy(order => order.CreatedAt)
+                .OrderByDescending(order => order.CreatedAt)
                 .Select(order => order.ConvertToDto());
         }
 
@@ -30,15 +32,38 @@ namespace Sales.API.Extentions
                 UId = window.UId,
                 Name = window.Name,
                 Quantity = window.Quantity,
-                SubElements = window.SubElements.ConvertToDto()
+                NumberOfSubElements = window.SubElements?.Sum(subElement => subElement.Quantity),
+                SubElements = window.SubElements.ConvertToDto(),
+                CreatedAt = window.CreatedAt,
+                UpdatedAt = window.UpdatedAt
+            };
+        }
+
+        public static WindowDTO ConvertToDtoWindowOnly(this Window window)
+        {
+            return new WindowDTO
+            {
+                UId = window.UId,
+                Name = window.Name,
+                Quantity = window.Quantity,
+                NumberOfSubElements = window.SubElements?.Count(),
+                CreatedAt = window.CreatedAt,
+                UpdatedAt = window.UpdatedAt
             };
         }
 
         public static IEnumerable<WindowDTO> ConvertToDto(this IEnumerable<Window> windows)
         {
             return windows
-                .OrderBy(window => window.CreatedAt)
+                .OrderByDescending(window => window.CreatedAt)
                 .Select(window => window.ConvertToDto());
+        }
+
+        public static IEnumerable<WindowDTO> ConvertToDtoWindowOnly(this IEnumerable<Window> windows)
+        {
+            return windows
+                .OrderByDescending(window => window.CreatedAt)
+                .Select(window => window.ConvertToDtoWindowOnly());
         }
 
         public static SubElementDTO ConvertToDto(this SubElement subElement)
@@ -51,14 +76,16 @@ namespace Sales.API.Extentions
                 ElementTypeId = subElement.ElementTypeId,
                 ElementTypeName = subElement.ElementType.Name,
                 Height = subElement.Height,
-                Width = subElement.Width
+                Width = subElement.Width,
+                CreatedAt = subElement.CreatedAt,
+                UpdatedAt = subElement.UpdatedAt
             };
         }
 
         public static IEnumerable<SubElementDTO> ConvertToDto(this IEnumerable<SubElement> subElements)
         {
             return subElements
-                .OrderBy(subElement => subElement.Element)
+                .OrderByDescending(subElement => subElement.Element)
                 .Select(subElement => subElement.ConvertToDto());
         }
 
@@ -67,7 +94,9 @@ namespace Sales.API.Extentions
             return new ElementTypeDTO
             {
                 UId = elementType.UId,
-                Name = elementType.Name
+                Name = elementType.Name,
+                CreatedAt = elementType.CreatedAt,
+                UpdatedAt = elementType.UpdatedAt
             };
         }
 
@@ -75,6 +104,59 @@ namespace Sales.API.Extentions
         {
             return elementTypes
                 .Select(elementType => elementType.ConvertToDto());
+        }
+
+        public static Order ConvertToModel(this OrderDTO orderDTO)
+        {
+            return new Order
+            {
+                UId = orderDTO.UId,
+                Name = orderDTO.Name,
+                State = orderDTO.State,
+                Windows = orderDTO.Windows.ConvertToModel(),
+                CreatedAt = orderDTO.CreatedAt,
+                UpdatedAt = orderDTO.UpdatedAt
+            };
+        }
+
+        public static IEnumerable<Window> ConvertToModel(this IEnumerable<WindowDTO> windowDTOs)
+        {
+            return windowDTOs
+                .Select(windowDTO => windowDTO.ConvertToModel());
+        }
+
+        public static Window ConvertToModel(this WindowDTO windowDTO)
+        {
+            return new Window
+            {
+                UId = windowDTO.UId,
+                Name = windowDTO.Name,
+                Quantity = windowDTO.Quantity,
+                SubElements = windowDTO.SubElements.ConvertToModel(),
+                CreatedAt = windowDTO.CreatedAt,
+                UpdatedAt = windowDTO.UpdatedAt
+            };
+        }
+
+        public static IEnumerable<SubElement> ConvertToModel(this IEnumerable<SubElementDTO> subElementDTOs)
+        {
+            return subElementDTOs
+                .Select(subElementDTO => subElementDTO.ConvertToModel());
+        }
+
+        public static SubElement ConvertToModel(this SubElementDTO subElementDTO)
+        {
+            return new SubElement
+            {
+                UId = subElementDTO.UId,
+                Quantity = subElementDTO.Quantity,
+                Element = subElementDTO.Element,
+                ElementTypeId = subElementDTO.ElementTypeId,
+                Height = subElementDTO.Height,
+                Width = subElementDTO.Width,
+                CreatedAt = subElementDTO.CreatedAt,
+                UpdatedAt = subElementDTO.UpdatedAt
+            };
         }
     }
 }
