@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Sales.APP.Enums;
+using Sales.APP.Models;
 using Sales.DTO.Models;
 
 namespace Sales.APP.Pages
@@ -7,11 +7,7 @@ namespace Sales.APP.Pages
     public class OrderDialogBase : ComponentBase
     {
         [Parameter]
-        public bool DialogIsOpen { get; set; }
-        [Parameter]
-        public string ActionType { get; set; }
-        [Parameter]
-        public OrderDTO Order { get; set; }
+        public DialogueModel<OrderDTO> OrderDialogueModel { get; set; }
         [Parameter]
         public EventCallback OnSave { get; set; }
         [Parameter]

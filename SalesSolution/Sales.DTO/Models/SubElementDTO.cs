@@ -1,8 +1,7 @@
 ﻿namespace Sales.DTO.Models
 {
-    public class SubElementDTO
+    public class SubElementDTO : BaseDTO
     {
-        public Guid UId { get; set; }
         public int Element { get; set; }
         public int Width { get; set; }
         public int Height { get; set; }

@@ -1,17 +1,48 @@
 ﻿@inherits OrderDialogBase
 
-<MatDialog @bind-IsOpen="@DialogIsOpen" CanBeClosed=false>
-    <MatDialogTitle>@ActionType Order</MatDialogTitle>
-    <MatDialogContent>
-        <p>
-            <MatTextField @bind-Value="@Order.State" Label="State" Style="width:500px;"></MatTextField>
-        </p>
-        <p>
-            <MatTextField @bind-Value="@Order.Name" Label="Name" Style="width:500px;"></MatTextField>
-        </p>
-    </MatDialogContent>
-    <MatDialogActions>
-        <MatButton Outlined=true OnClick="@OnCancel" Style="color:darkorange">Cancel</MatButton>&nbsp;
-        <MatButton Outlined=true OnClick="@OnSave" Style="color:darkgreen">Save</MatButton>
-    </MatDialogActions>
+<MatDialog @bind-IsOpen="@OrderDialogueModel.IsOpen" CanBeClosed=false>
+    <EditForm Model="OrderDialogueModel.ModelDTO" OnValidSubmit="@OnSave">
+        <DataAnnotationsValidator />
+        <MatDialogTitle>@OrderDialogueModel.ActionType Order</MatDialogTitle>
+        <MatDialogContent>
+                <div class="margin-top-15">
+                <p>
+                    <MatTextField @bind-Value="@OrderDialogueModel.ModelDTO.State" Label="State" Class="width-500"></MatTextField>
+                    <ValidationMessage For="@(() => OrderDialogueModel.ModelDTO.State)" />
+                </p>
+                <p>
+                    <MatTextField @bind-Value="@OrderDialogueModel.ModelDTO.Name" Label="Name" Class="width-500"></MatTextField>
+                    <ValidationMessage For="@(() => OrderDialogueModel.ModelDTO.Name)" />
+                </p>
+            </div>
+        </MatDialogContent>
+        <MatDialogActions Class="margin-right-15 margin-bottom-15">
+            <MatButton Outlined=true Type="submit" Style="color:darkgreen">Save</MatButton>&nbsp;
+            <MatButton Outlined=true OnClick="@OnCancel" Style="color:darkorange">Cancel</MatButton>
+        </MatDialogActions>
+    </EditForm>
+
 </MatDialog>
+
+<style>
+    .margin-right-15
+    {
+        margin-right: 15px !important;
+    }
+    .margin-left-15
+    {
+        margin-left: 15px !important;
+    } 
+    .margin-top-15
+    {
+        margin-top: 15px !important;
+    }
+    .margin-bottom-15
+    {
+        margin-bottom: 15px !important;
+    }
+    .width-500
+    {
+        width: 500px !important;
+    }
+</style>

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Sales.DAL.Data;
 
@@ -11,9 +12,11 @@ using Sales.DAL.Data;
 namespace Sales.DAL.Migrations
 {
     [DbContext(typeof(SalesDbContext))]
-    partial class SalesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230324215324_SetOrderColumnSize")]
+    partial class SetOrderColumnSize
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -44,7 +47,7 @@ namespace Sales.DAL.Migrations
 
                     b.HasKey("UId");
 
-                    b.ToTable("ElementTypes", (string)null);
+                    b.ToTable("ElementTypes");
 
                     b.HasData(
                         new
@@ -87,7 +90,7 @@ namespace Sales.DAL.Migrations
 
                     b.HasKey("UId");
 
-                    b.ToTable("Orders", (string)null);
+                    b.ToTable("Orders");
 
                     b.HasData(
                         new
@@ -146,7 +149,7 @@ namespace Sales.DAL.Migrations
 
                     b.HasIndex("WindowId");
 
-                    b.ToTable("SubElements", (string)null);
+                    b.ToTable("SubElements");
 
                     b.HasData(
                         new
@@ -251,7 +254,7 @@ namespace Sales.DAL.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("Windows", (string)null);
+                    b.ToTable("Windows");
 
                     b.HasData(
                         new

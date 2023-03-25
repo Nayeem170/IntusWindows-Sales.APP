@@ -1,8 +1,7 @@
 ﻿namespace Sales.DTO.Models
 {
-    public class ElementTypeDTO
+    public class ElementTypeDTO : BaseDTO
     {
-        public Guid UId { get; set; }
         public string Name { get; set; }
     }
 }

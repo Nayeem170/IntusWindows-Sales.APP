@@ -1,28 +1,55 @@
 ﻿using MatBlazor;
 using Microsoft.AspNetCore.Components;
+using Sales.APP.Services.Contract;
 using Sales.DTO.Models;
 
 namespace Sales.APP.Pages
 {
     public class SubElementTableBase : ComponentBase
     {
+        [Inject]
+        public ISubElementService SubElementService { get; set; }
         [Parameter]
-        public WindowDTO Window { get; set; }
+        public IEnumerable<SubElementDTO> SubElements { get; set; }
 
-        protected IEnumerable<SubElementDTO> DisplayedSubElements = null;
+        protected IEnumerable<SubElementDTO> DisplayedSubElements { get; set; }
+        public IEnumerable<SubElementDTO> OldSubElements { get; set; }
+
 
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
-            DisplayedSubElements = Window.SubElements;
-            SortData(null);
+
+            OldSubElements = SubElements;
+            DisplayedSubElements = SubElements;
+            SubElementSearchText = string.Empty;
+        }
+
+        private bool shouldUpdate()
+        {
+            if (OldSubElements.Count() != SubElements.Count())
+            {
+                return true;
+            }
+
+            var bothEquals = OldSubElements.OrderBy(old => old.UId)
+                    .ThenBy(old => old.UpdatedAt)
+                .SequenceEqual(SubElements.OrderBy(current => current.UId)
+                    .ThenBy(current => current.UpdatedAt));
+
+            return !bothEquals;
         }
 
         protected override async Task OnParametersSetAsync()
         {
             await base.OnParametersSetAsync();
-            DisplayedSubElements = Window.SubElements;
-            SubElementSearchText = string.Empty;
+
+            if (shouldUpdate())
+            {
+                OldSubElements = SubElements;
+                DisplayedSubElements = SubElements;
+                SubElementSearchText = string.Empty;
+            }
         }
 
         private string _subElementSearchText;
@@ -41,11 +68,11 @@ namespace Sales.APP.Pages
         {
             if (string.IsNullOrEmpty(text))
             {
-                DisplayedSubElements = Window.SubElements;
+                DisplayedSubElements = SubElements;
             }
             else
             {
-                DisplayedSubElements = Window.SubElements.Where(subElement =>
+                DisplayedSubElements = SubElements.Where(subElement =>
                     subElement.Element.ToString().Contains(text, StringComparison.OrdinalIgnoreCase) ||
                     subElement.Width.ToString().Contains(text, StringComparison.OrdinalIgnoreCase) ||
                     subElement.Height.ToString().Contains(text, StringComparison.OrdinalIgnoreCase) ||
@@ -61,43 +88,43 @@ namespace Sales.APP.Pages
 
                 if (sort.SortId == "element" && sort.Direction == MatSortDirection.Asc)
                 {
-                    DisplayedSubElements = Window.SubElements.OrderBy(order => order.Element);
+                    DisplayedSubElements = SubElements.OrderBy(order => order.Element);
                 }
                 else if (sort.SortId == "element" && sort.Direction == MatSortDirection.Desc)
                 {
-                    DisplayedSubElements = Window.SubElements.OrderByDescending(order => order.Element);
+                    DisplayedSubElements = SubElements.OrderByDescending(order => order.Element);
                 }
                 else if (sort.SortId == "width" && sort.Direction == MatSortDirection.Asc)
                 {
-                    DisplayedSubElements = Window.SubElements.OrderBy(order => order.Width);
+                    DisplayedSubElements = SubElements.OrderBy(order => order.Width);
                 }
                 else if (sort.SortId == "width" && sort.Direction == MatSortDirection.Desc)
                 {
-                    DisplayedSubElements = Window.SubElements.OrderByDescending(order => order.Width);
+                    DisplayedSubElements = SubElements.OrderByDescending(order => order.Width);
                 }
                 else if (sort.SortId == "height" && sort.Direction == MatSortDirection.Asc)
                 {
-                    DisplayedSubElements = Window.SubElements.OrderBy(order => order.Height);
+                    DisplayedSubElements = SubElements.OrderBy(order => order.Height);
                 }
                 else if (sort.SortId == "height" && sort.Direction == MatSortDirection.Desc)
                 {
-                    DisplayedSubElements = Window.SubElements.OrderByDescending(order => order.Height);
+                    DisplayedSubElements = SubElements.OrderByDescending(order => order.Height);
                 }
                 else if (sort.SortId == "quantity" && sort.Direction == MatSortDirection.Asc)
                 {
-                    DisplayedSubElements = Window.SubElements.OrderBy(order => order.Quantity);
+                    DisplayedSubElements = SubElements.OrderBy(order => order.Quantity);
                 }
                 else if (sort.SortId == "quantity" && sort.Direction == MatSortDirection.Desc)
                 {
-                    DisplayedSubElements = Window.SubElements.OrderByDescending(order => order.Quantity);
+                    DisplayedSubElements = SubElements.OrderByDescending(order => order.Quantity);
                 }
                 else if (sort.SortId == "element-type" && sort.Direction == MatSortDirection.Asc)
                 {
-                    DisplayedSubElements = Window.SubElements.OrderBy(order => order.ElementTypeName);
+                    DisplayedSubElements = SubElements.OrderBy(order => order.ElementTypeName);
                 }
                 else if (sort.SortId == "element-type" && sort.Direction == MatSortDirection.Desc)
                 {
-                    DisplayedSubElements = Window.SubElements.OrderByDescending(order => order.ElementTypeName);
+                    DisplayedSubElements = SubElements.OrderByDescending(order => order.ElementTypeName);
                 }
             }
         }

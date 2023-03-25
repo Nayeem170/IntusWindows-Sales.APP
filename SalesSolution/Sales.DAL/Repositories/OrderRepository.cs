@@ -15,7 +15,7 @@ namespace Sales.DAL.Repositories
             this.salesDbContext = salesDbContext;
         }
 
-        public async Task<IEnumerable<Order>> GetOrders()
+        public async Task<IEnumerable<Order>> GetOrdersAsync()
         {
             return await salesDbContext.Orders
                 .ToListAsync();
@@ -28,12 +28,32 @@ namespace Sales.DAL.Repositories
                 .ToListAsync();
         }
 
-        public async Task<Order?> GetOrderIncludeAll(Guid uid)
+        public async Task<Order?> GetOrderIncludeAllAsync(Guid uid)
         {
             return await salesDbContext.Orders
                 .Where(order => order.UId == uid)
                 .IncludeAll()
                 .FirstOrDefaultAsync();
+        }
+
+        public async Task<Order> AddOrderAsync(Order order)
+        {
+            await salesDbContext.Orders.AddAsync(order);
+            salesDbContext.SaveChanges();
+            return order;
+        }
+
+        public Order EditOrder(Order order)
+        {
+            salesDbContext.Entry(order).State = EntityState.Modified;
+            salesDbContext.SaveChanges();
+            return order;
+        }
+
+        public bool DeleteOrder(Order order)
+        {
+            salesDbContext.Orders.Remove(order);
+            return salesDbContext.SaveChanges() == 1;
         }
     }
 }

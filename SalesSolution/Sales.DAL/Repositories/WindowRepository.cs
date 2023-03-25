@@ -18,13 +18,15 @@ namespace Sales.DAL.Repositories
         public async Task<IEnumerable<Window>> GetWindows()
         {
             return await salesDbContext.Windows
+                .IncludeSubElement()
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Window>> GetWindows(Guid orderId)
+        public async Task<IEnumerable<Window>> GetWindowsForOrder(Guid orderId)
         {
             return await salesDbContext.Windows
                 .Where(window => window.OrderId == orderId)
+                .IncludeSubElement()
                 .ToListAsync();
         }
 
@@ -35,7 +37,7 @@ namespace Sales.DAL.Repositories
                 .ToListAsync();
         }
 
-        public async Task<Window?> GetWindowIncludeAll(Guid uid)
+        public async Task<Window?> GetWindow(Guid uid)
         {
             return await salesDbContext.Windows
                 .Where(window => window.UId == uid)

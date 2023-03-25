@@ -1,31 +1,71 @@
 ﻿using MatBlazor;
 using Microsoft.AspNetCore.Components;
 using Sales.APP.Enums;
+using Sales.APP.Extentions;
+using Sales.APP.Models;
+using Sales.APP.Services.Contract;
 using Sales.DTO.Models;
-using System;
-using System.ComponentModel;
-using System.Linq;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Sales.APP.Pages
 {
     public class OrderTableBase : ComponentBase
     {
+        [Inject]
+        public IOrderService OrderService { get; set; }
+        [Inject]
+        protected IMatToaster Toaster { get; set; }
+        [Inject]
+        protected IMatDialogService MatDialogService { get; set; }
         [Parameter]
         public IEnumerable<OrderDTO> Orders { get; set; }
         [Parameter]
         public EventCallback<OrderDTO> OnOrderSelected { get; set; }
+        [Parameter]
+        public EventCallback<OrderDTO> OnChange { get; set; }
 
-        public OrderDTO Order { get; set; } = new OrderDTO();
-        public string ActionType { get; set; } = FormActionType.Add;
-        public bool DialogIsOpen { get; set; } = false;
+        public DialogueModel<OrderDTO> OrderDialogueModel { get; set; } = new DialogueModel<OrderDTO>(new OrderDTO());
+        public IEnumerable<OrderDTO> OldOrders { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
+
+            OldOrders = Orders;
             DisplayedOrders = Orders;
-            SortData(null);
-            await OnOrderSelected.InvokeAsync(DisplayedOrders.First());
+            OrderSearchText = string.Empty;
+        }
+
+        private bool shouldUpdate()
+        {
+            if (OldOrders.Count() != Orders.Count())
+            {
+                return true;
+            }
+
+            var bothEquals = OldOrders.OrderBy(old => old.UId)
+                    .ThenBy(old => old.UpdatedAt)
+                .SequenceEqual(Orders.OrderBy(current => current.UId)
+                    .ThenBy(current => current.UpdatedAt));
+
+            return !bothEquals;
+        }
+
+        protected override async Task OnParametersSetAsync()
+        {
+            await base.OnParametersSetAsync();
+
+            if (shouldUpdate())
+            {
+                OldOrders = Orders;
+                DisplayedOrders = Orders;
+                OrderSearchText = string.Empty;
+            }
+        }
+
+        protected void OnRowDbClick(object item)
+        {
+            var currentSelectedOrder = item as OrderDTO;
+            OnOrderSelected.InvokeAsync(currentSelectedOrder);
         }
 
         private string _orderSearchText;
@@ -79,23 +119,35 @@ namespace Sales.APP.Pages
             }
         }
 
-        private OrderDTO _currentSelectedOrder = null;
-        protected void OnRowDbClick(object item)
-        {
-            _currentSelectedOrder = item as OrderDTO;
-            OnOrderSelected.InvokeAsync(_currentSelectedOrder);
-        }
-
         public void OpenAddOrderDialogue()
         {
-            Order = new OrderDTO();
-            ActionType = FormActionType.Add;
-            DialogIsOpen = true;
+            OrderDialogueModel
+                .Clear()
+                .AddDialogue()
+                .Open();
         }
 
-        public void EditAOrder()
+        public void OpenEditOrderDialogue(OrderDTO order)
         {
-            Console.WriteLine("Update a order");
+            OrderDialogueModel
+                .Set(order)
+                .EditDialogue()
+                .Open();
+        }
+
+        public async Task OpenDeleteOrderPopupAsync(OrderDTO order)
+        {
+            var deleteThis = await MatDialogService.ConfirmAsync("Delete this order?");
+            if (deleteThis)
+            {
+                var isDeleted = await OrderService.DeleteOrder(order);
+
+                await OnChange.InvokeAsync();
+
+                Action<string> toastAction = isDeleted ? Toaster.DeleteSuccessful
+                                                        : Toaster.DeleteFailed;
+                toastAction(DataModelType.Order);
+            }
         }
 
         public void DeleteAOrder()
@@ -103,24 +155,31 @@ namespace Sales.APP.Pages
             Console.WriteLine("Delete a order");
         }
 
-        public void SaveAOrder()
-        {
-            Console.WriteLine("Update a order");
-        }
-
         public void CancelAOrder()
         {
             Console.WriteLine("Delete a order");
         }
 
-        protected void OnSave()
+        protected async Task OnSaveAsync()
         {
-            DialogIsOpen = false;
+            OrderDialogueModel.Close();
+
+            var isSuccess = OrderDialogueModel.IsAdd()
+                          ? await OrderService.AddOrder(OrderDialogueModel.ModelDTO)
+                          : await OrderService.EditOrder(OrderDialogueModel.ModelDTO);
+
+            await OnChange.InvokeAsync();
+
+            Action<string> toastAction = isSuccess
+                ? (OrderDialogueModel.IsAdd() ? Toaster.CreateSuccessful : Toaster.UpdateSuccessful)
+                : (OrderDialogueModel.IsAdd() ? Toaster.CreateFailed : Toaster.UpdateFailed);
+
+            toastAction(DataModelType.Order);
         }
 
         protected void OnCancel()
         {
-            DialogIsOpen = false;
+            OrderDialogueModel.IsOpen = false;
         }
     }
 }

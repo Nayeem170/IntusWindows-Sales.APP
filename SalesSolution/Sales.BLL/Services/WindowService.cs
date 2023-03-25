@@ -18,6 +18,11 @@ namespace Sales.BLL.Services
             return await windowRepository.GetWindows();
         }
 
+        public async Task<IEnumerable<Window>> GetWindows(Guid orderId)
+        {
+            return await windowRepository.GetWindowsForOrder(orderId);
+        }
+
         public Task<Window?> GetWindow(Guid uid)
         {
             return windowRepository.GetWindow(uid);

@@ -1,12 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Sales.DAL.Entities
+﻿namespace Sales.DTO.Models
 {
-    public class BaseModel
+    public class BaseDTO
     {
-        [Key]
         public Guid UId { get; set; }
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
+
     }
 }

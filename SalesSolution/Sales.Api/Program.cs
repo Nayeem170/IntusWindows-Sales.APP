@@ -1,6 +1,14 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Net.Http.Headers;
 using Sales.API.Extentions;
+using Serilog;
+
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Debug()
+    .WriteTo.File("Logs/sales-api-.txt", rollingInterval: RollingInterval.Day,
+        outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz}, [{Level}], {Message:lj}{NewLine}{Exception}")
+    .WriteTo.Console()
+    .CreateLogger();
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +35,7 @@ if (app.Environment.IsDevelopment())
 app.UseCors(policy => policy
         .WithOrigins("http://localhost:7247", "https://localhost:7247")
         .WithHeaders(HeaderNames.ContentType)
+        .AllowAnyMethod()
     );
 
 app.UseHttpsRedirection();
