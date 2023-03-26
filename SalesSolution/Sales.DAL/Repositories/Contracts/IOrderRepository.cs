@@ -2,13 +2,9 @@
 
 namespace Sales.DAL.Repositories.Contracts
 {
-    public interface IOrderRepository
+    public interface IOrderRepository : IRepository<Order>
     {
-        Task<IEnumerable<Order>> GetOrdersAsync();
-        Task<IEnumerable<Order>> GetOrdersIncludeAll();
-        Task<Order?> GetOrderIncludeAllAsync(Guid uid);
-        Task<Order> AddOrderAsync(Order order);
-        Order EditOrder(Order order);
-        bool DeleteOrder(Order order);
+        IQueryable<Order> GetAllIncludeAll();
+        Order? GetIncludeAll(Guid uid);
     }
 }

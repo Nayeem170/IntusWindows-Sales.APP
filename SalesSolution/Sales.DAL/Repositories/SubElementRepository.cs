@@ -1,42 +1,33 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Sales.DAL.Data;
+﻿using Sales.DAL.Data;
 using Sales.DAL.Entities;
 using Sales.DAL.Extentions;
 using Sales.DAL.Repositories.Contracts;
 
 namespace Sales.DAL.Repositories
 {
-    public class SubElementRepository : ISubElementRepository
+    public class SubElementRepository : GenericRepository<SubElement, SalesDbContext>, ISubElementRepository
     {
-        private readonly SalesDbContext salesDbContext;
+        public SubElementRepository(SalesDbContext context) : base(context) { }
 
-        public SubElementRepository(SalesDbContext salesDbContext)
+        public override IQueryable<SubElement> GetAll()
         {
-            this.salesDbContext = salesDbContext;
+            return base.GetAll()
+                .IncludeAll();
         }
 
-        public async Task<IEnumerable<SubElement>> GetSubElements()
+        public IQueryable<SubElement> GetAll(Guid windowId)
         {
-            return await salesDbContext.SubElements
-                .IncludeAll()
-                .ToListAsync();
-        }
-
-        public async Task<IEnumerable<SubElement>> GetSubElements(Guid windowId)
-        {
-            return await salesDbContext.SubElements
+            return base.GetAll()
                 .Where(subElement => subElement.WindowId == windowId)
-                .IncludeAll()
-                .ToListAsync();
+                .IncludeAll();
         }
 
-        public async Task<SubElement?> GetSubElement(Guid uid)
+        public SubElement? GetIncludeAll(Guid uid)
         {
-            return await salesDbContext.SubElements
-                .Where(subElement => subElement.UId == uid)
+            return base.GetAll()
+                .Where(order => order.UId == uid)
                 .IncludeAll()
-                .FirstOrDefaultAsync();
+                .FirstOrDefault();
         }
-
     }
 }

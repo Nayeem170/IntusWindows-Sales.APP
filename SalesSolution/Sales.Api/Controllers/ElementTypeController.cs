@@ -19,11 +19,11 @@ namespace Sales.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ElementTypeDTO>>> GetOrders()
+        public ActionResult<IEnumerable<ElementTypeDTO>> GetElementTypes()
         {
             try
             {
-                var elementTypes = await elementTypeService.GetElementTypes();
+                var elementTypes = elementTypeService.GetElementTypes();
 
                 if (elementTypes.IsNullOrEmpty())
                 {
@@ -38,16 +38,16 @@ namespace Sales.API.Controllers
             catch (Exception)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                    "Error retriving data from the database");
+                    "Sorry, we can't retrive element types at the moment.");
             }
         }
 
         [HttpGet("{uid:guid}")]
-        public async Task<ActionResult<IEnumerable<ElementTypeDTO>>> GetElementType(Guid uid)
+        public ActionResult<IEnumerable<ElementTypeDTO>> GetElementType(Guid uid)
         {
             try
             {
-                var elementType = await elementTypeService.GetElementType(uid);
+                var elementType = elementTypeService.GetElementType(uid);
 
                 if (elementType.IsNull())
                 {
@@ -62,7 +62,7 @@ namespace Sales.API.Controllers
             catch (Exception)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                    "Error retriving data from the database");
+                    "Sorry, we can't retrive element types at the moment.");
             }
         }
     }

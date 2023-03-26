@@ -4,8 +4,8 @@ namespace Sales.BLL.Services.Contracts
 {
     public interface ISubElementService
     {
-        Task<IEnumerable<SubElement>> GetSubElements();
-        Task<IEnumerable<SubElement>> GetSubElements(Guid windowId);
-        Task<SubElement?> GetSubElement(Guid uid);
+        IEnumerable<SubElement> GetSubElements();
+        IEnumerable<SubElement> GetSubElements(Guid windowId);
+        SubElement? GetSubElement(Guid uid);
     }
 }

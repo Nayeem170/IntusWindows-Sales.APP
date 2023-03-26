@@ -4,7 +4,7 @@ namespace Sales.BLL.Services.Contracts
 {
     public interface IElementTypeService
     {
-        Task<IEnumerable<ElementType>> GetElementTypes();
-        Task<ElementType?> GetElementType(Guid uid);
+        IEnumerable<ElementType> GetElementTypes();
+        ElementType? GetElementType(Guid uid);
     }
 }

@@ -20,11 +20,11 @@ namespace Sales.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<SubElement>>> GetSubElements()
+        public ActionResult<IEnumerable<SubElement>> GetSubElements()
         {
             try
             {
-                var subElements = await subElementService.GetSubElements();
+                var subElements = subElementService.GetSubElements();
 
                 if (subElements.IsNullOrEmpty())
                 {
@@ -44,11 +44,11 @@ namespace Sales.API.Controllers
         }
 
         [HttpGet("for/{windowId:guid}")]
-        public async Task<ActionResult<IEnumerable<SubElement>>> GetSubElements(Guid windowId)
+        public ActionResult<IEnumerable<SubElement>> GetSubElements(Guid windowId)
         {
             try
             {
-                var subElements = await subElementService.GetSubElements(windowId);
+                var subElements = subElementService.GetSubElements(windowId);
 
                 if (subElements.IsNullOrEmpty())
                 {
@@ -68,11 +68,11 @@ namespace Sales.API.Controllers
         }
 
         [HttpGet("{uid:guid}")]
-        public async Task<ActionResult<IEnumerable<SubElementDTO>>> GetSubElement(Guid uid)
+        public ActionResult<IEnumerable<SubElementDTO>> GetSubElement(Guid uid)
         {
             try
             {
-                var subElement = await subElementService.GetSubElement(uid);
+                var subElement = subElementService.GetSubElement(uid);
 
                 if (subElement.IsNull())
                 {

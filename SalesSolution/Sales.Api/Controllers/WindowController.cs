@@ -20,11 +20,11 @@ namespace Sales.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<WindowDTO>>> GetWindows()
+        public ActionResult<IEnumerable<WindowDTO>> GetWindows()
         {
             try
             {
-                var windows = await windowService.GetWindows();
+                var windows = windowService.GetWindows();
 
                 if (windows.IsNullOrEmpty())
                 {
@@ -36,19 +36,20 @@ namespace Sales.API.Controllers
                     return Ok(windowDTOs);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Log.Error($"{ex.Message}", ex);
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                    "Error retriving data from the database");
+                    "Sorry, we can't retrive windows at the moment.");
             }
         }
 
         [HttpGet("for/{orderId:guid}")]
-        public async Task<ActionResult<IEnumerable<WindowDTO>>> GetWindows(Guid orderId)
+        public ActionResult<IEnumerable<WindowDTO>> GetWindows([FromRoute] Guid orderId)
         {
             try
             {
-                var windows = await windowService.GetWindows(orderId);
+                var windows = windowService.GetWindows(orderId);
 
                 if (windows.IsNullOrEmpty())
                 {
@@ -57,23 +58,24 @@ namespace Sales.API.Controllers
                 }
                 else
                 {
-                    var windowDTOs = windows.ConvertToDtoWindowOnly();
+                    var windowDTOs = windows.ConvertToDto();
                     return Ok(windowDTOs);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Log.Error($"{ex.Message}", ex);
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                    "Error retriving data from the database");
+                    "Sorry, we can't retrive windows at the moment.");
             }
         }
 
         [HttpGet("{uid:guid}")]
-        public async Task<ActionResult<IEnumerable<WindowDTO>>> GetWindow(Guid orderId)
+        public ActionResult<IEnumerable<WindowDTO>> GetWindow(Guid orderId)
         {
             try
             {
-                var window = await windowService.GetWindow(orderId);
+                var window = windowService.GetWindow(orderId);
 
                 if (window.IsNull())
                 {
@@ -81,14 +83,76 @@ namespace Sales.API.Controllers
                 }
                 else
                 {
-                    var windowDTO = window.ConvertToDtoWindowOnly();
+                    var windowDTO = window.ConvertToDto();
                     return Ok(windowDTO);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Log.Error($"{ex.Message}", ex);
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                    "Error retriving data from the database");
+                    "Sorry, we can't find window at the moment.");
+            }
+        }
+
+        [HttpPost]
+        public ActionResult<IEnumerable<WindowDTO>> AddOrder([FromBody] WindowDTO windowDTO)
+        {
+            if (!ModelState.IsValid)
+            {
+                return UnprocessableEntity(ModelState);
+            }
+
+            try
+            {
+                var window = windowDTO.ConvertToModel();
+                window = windowService.AddWindow(window);
+                windowDTO = window.ConvertToDto();
+                return Ok(windowDTO);
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"{ex.Message}", ex);
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    new ErrorResponseDto("Sorry, we can't create window at the moment."));
+            }
+        }
+        [HttpPut]
+        public ActionResult<IEnumerable<WindowDTO>> EditOrder([FromBody] WindowDTO windowDTO)
+        {
+            if (!ModelState.IsValid)
+            {
+                return UnprocessableEntity(ModelState);
+            }
+
+            try
+            {
+                var window = windowDTO.ConvertToModel();
+                window = windowService.EditWindow(window);
+                windowDTO = window.ConvertToDto();
+                return Ok(windowDTO);
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"{ex.Message}", ex);
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    new ErrorResponseDto("Sorry, we can't update window at the moment."));
+            }
+        }
+
+        [HttpDelete("{uid:guid}")]
+        public ActionResult DeleteWindow([FromRoute] Guid uid)
+        {
+            try
+            {
+                windowService.DeleteWindow(uid);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"{ex.Message}", ex);
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    new ErrorResponseDto("Sorry, we can't delete window at the moment."));
             }
         }
     }

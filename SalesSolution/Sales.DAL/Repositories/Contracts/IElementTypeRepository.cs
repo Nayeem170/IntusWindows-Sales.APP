@@ -2,9 +2,7 @@
 
 namespace Sales.DAL.Repositories.Contracts
 {
-    public interface IElementTypeRepository
+    public interface IElementTypeRepository : IRepository<ElementType>
     {
-        Task<IEnumerable<ElementType>> GetElementTypes();
-        Task<ElementType?> GetElementType(Guid uid);
     }
 }

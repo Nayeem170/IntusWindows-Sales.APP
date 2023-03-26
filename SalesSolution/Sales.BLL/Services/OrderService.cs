@@ -15,32 +15,34 @@ namespace Sales.BLL.Services
             this.orderRepository = orderRepository;
         }
 
-        public async Task<IEnumerable<Order>> GetOrdersAsync()
+        public IEnumerable<Order> GetOrders()
         {
-            return await orderRepository.GetOrdersAsync();
+            return orderRepository.GetAll();
         }
 
-        public async Task<Order?> GetOrderAsync(Guid uid)
+        public Order? GetOrder(Guid uid)
         {
-            return await orderRepository.GetOrderIncludeAllAsync(uid);
+            return orderRepository.Get(uid);
         }
 
-        public async Task<Order> AddOrderAsync(Order order)
+        public Order AddOrder(Order order)
         {
-            return await orderRepository.AddOrderAsync(order);
+            return order == null ? throw new ArgumentNullException("Order can not be null")
+                                 : orderRepository.Add(order);
         }
 
         public Order EditOrder(Order order)
         {
-            return orderRepository.EditOrder(order);
+            return order == null ? throw new ArgumentNullException("Order can not be null")
+                                 : orderRepository.Edit(order);
         }
 
-        public async Task<bool> DeleteOrderAsync(Guid uid)
+        public bool DeleteOrder(Guid uid)
         {
-            var order = await GetOrderAsync(uid);
+            var order = GetOrder(uid);
             if (!order.IsNull())
             {
-                return orderRepository.DeleteOrder(order);
+                return orderRepository.Delete(order);
             }
             return false;
         }

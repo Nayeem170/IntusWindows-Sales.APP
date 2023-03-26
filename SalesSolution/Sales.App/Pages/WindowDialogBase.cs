@@ -4,10 +4,10 @@ using Sales.DTO.Models;
 
 namespace Sales.APP.Pages
 {
-    public class OrderDialogBase : ComponentBase
+    public class WindowDialogBase : ComponentBase
     {
         [Parameter]
-        public DialogueModel<OrderDTO> DialogueModel { get; set; }
+        public DialogueModel<WindowDTO> DialogueModel { get; set; }
         [Parameter]
         public EventCallback OnSave { get; set; }
         [Parameter]

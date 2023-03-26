@@ -12,19 +12,19 @@ namespace Sales.BLL.Services
         {
             this.subElementRepository = subElementRepository;
         }
-        public async Task<IEnumerable<SubElement>> GetSubElements()
+        public IEnumerable<SubElement> GetSubElements()
         {
-            return await subElementRepository.GetSubElements();
+            return subElementRepository.GetAll();
         }
 
-        public async Task<IEnumerable<SubElement>> GetSubElements(Guid windowId)
+        public IEnumerable<SubElement> GetSubElements(Guid windowId)
         {
-            return await subElementRepository.GetSubElements(windowId);
+            return subElementRepository.GetAll(windowId);
         }
 
-        public async Task<SubElement?> GetSubElement(Guid windowId)
+        public SubElement? GetSubElement(Guid windowId)
         {
-            return await subElementRepository.GetSubElement(windowId);
+            return subElementRepository.Get(windowId);
         }
     }
 }

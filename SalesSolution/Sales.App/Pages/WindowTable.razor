@@ -2,20 +2,34 @@
 
 <p>
     <MatTextField @bind-Value="@WindowSearchText" Label="Search" Icon="search"></MatTextField>
+    <MatButton Outlined="true" OnClick="@OpenAddWindowDialogue" Icon="add" Style="color: darkblue" Class="float-right">Add</MatButton>
 </p>
 
-<MatTable Items="@DisplayedWindows" class="mat-elevation-z5" AllowSelection="true" Striped="true" UseSortHeaderRow="true" OnRowDbClick="OnRowDbClickAsync">
+<MatTable Items="@DisplayedWindows" AllowSelection="true" 
+                                    Striped="true" 
+                                    UseSortHeaderRow="true" 
+                                    OnRowDbClick="OnRowDbClickAsync" 
+                                    class="mat-elevation-z5">
     <MatTableHeader>
         <MatSortHeaderRow SortChanged="@SortData">
             <MatSortHeader SortId="name">Name</MatSortHeader>
             <MatSortHeader SortId="quantity-of-windows">Quantity</MatSortHeader>
             <MatSortHeader SortId="total-sub-elements"># Sub Elements</MatSortHeader>
+            <MatSortHeader SortId="action">Action</MatSortHeader>
         </MatSortHeaderRow>
     </MatTableHeader>
     <MatTableRow>
         <td>@context.Name</td>
         <td>@context.Quantity</td>
-        <td>@context.NumberOfSubElements</td>
+        <td>@context.NumberOfSubElements.GetValueOrDefault()</td>
+        <td>
+            <MatButton Outlined="true" OnClick="@(_ => OpenEditWindowDialogue(@context))" Icon="edit" Style="color: darkorange">Edit</MatButton>
+            <MatButton Outlined="true" OnClick="@(_ => OpenDeleteWindowPopupAsync(@context))" Icon="delete" Style="color: darkred">Delete</MatButton>
+        </td>
     </MatTableRow>
 </MatTable>
 <p></p>
+
+<WindowDialog DialogueModel="@DialogueModel"
+             OnSave="@OnSaveAsync"
+             OnCancel="@OnCancel"></WindowDialog>

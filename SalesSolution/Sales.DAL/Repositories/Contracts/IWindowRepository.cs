@@ -2,11 +2,10 @@
 
 namespace Sales.DAL.Repositories.Contracts
 {
-    public interface IWindowRepository
+    public interface IWindowRepository : IRepository<Window>
     {
-        Task<IEnumerable<Window>> GetWindows();
-        Task<IEnumerable<Window>> GetWindowsForOrder(Guid orderId);
-        Task<IEnumerable<Window>> GetWindowsIncludeAll();
-        Task<Window?> GetWindow(Guid uid);
+        IQueryable<Window> GetAll(Guid orderId);
+        IQueryable<Window> GetAllIncludeAll();
+        Window? GetIncludeAll(Guid uid);
     }
 }

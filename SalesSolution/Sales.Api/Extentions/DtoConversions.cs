@@ -35,20 +35,8 @@ namespace Sales.API.Extentions
                 NumberOfSubElements = window.SubElements?.Sum(subElement => subElement.Quantity),
                 SubElements = window.SubElements.ConvertToDto(),
                 CreatedAt = window.CreatedAt,
-                UpdatedAt = window.UpdatedAt
-            };
-        }
-
-        public static WindowDTO ConvertToDtoWindowOnly(this Window window)
-        {
-            return new WindowDTO
-            {
-                UId = window.UId,
-                Name = window.Name,
-                Quantity = window.Quantity,
-                NumberOfSubElements = window.SubElements?.Count(),
-                CreatedAt = window.CreatedAt,
-                UpdatedAt = window.UpdatedAt
+                UpdatedAt = window.UpdatedAt,
+                OrderId = window.OrderId,
             };
         }
 
@@ -59,13 +47,6 @@ namespace Sales.API.Extentions
                 .Select(window => window.ConvertToDto());
         }
 
-        public static IEnumerable<WindowDTO> ConvertToDtoWindowOnly(this IEnumerable<Window> windows)
-        {
-            return windows
-                .OrderByDescending(window => window.CreatedAt)
-                .Select(window => window.ConvertToDtoWindowOnly());
-        }
-
         public static SubElementDTO ConvertToDto(this SubElement subElement)
         {
             return new SubElementDTO
@@ -74,7 +55,7 @@ namespace Sales.API.Extentions
                 Quantity = subElement.Quantity,
                 Element = subElement.Element,
                 ElementTypeId = subElement.ElementTypeId,
-                ElementTypeName = subElement.ElementType.Name,
+                ElementTypeName = subElement.ElementType?.Name,
                 Height = subElement.Height,
                 Width = subElement.Width,
                 CreatedAt = subElement.CreatedAt,
@@ -134,7 +115,8 @@ namespace Sales.API.Extentions
                 Quantity = windowDTO.Quantity,
                 SubElements = windowDTO.SubElements.ConvertToModel(),
                 CreatedAt = windowDTO.CreatedAt,
-                UpdatedAt = windowDTO.UpdatedAt
+                UpdatedAt = windowDTO.UpdatedAt,
+                OrderId = windowDTO.OrderId
             };
         }
 
