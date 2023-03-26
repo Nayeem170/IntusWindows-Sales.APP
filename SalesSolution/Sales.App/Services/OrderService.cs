@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Sales.APP.Services.Contract;
 using Sales.DTO.Models;
-using System.Diagnostics;
 using System.Net.Http.Json;
 
 namespace Sales.APP.Services
@@ -22,11 +21,12 @@ namespace Sales.APP.Services
                 var orders = await httpClient.GetFromJsonAsync<IEnumerable<OrderDTO>>("api/Orders");
                 return orders;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // Log exception
-                throw;
+                Console.WriteLine($"Exception thrown while {nameof(GetOrders)}.", ex);
             }
+
+            return new List<OrderDTO>();
         }
 
         public async Task<bool> AddOrder(OrderDTO orderDTO)
@@ -38,20 +38,21 @@ namespace Sales.APP.Services
                 if (response.IsSuccessStatusCode)
                 {
                     var responseBody = await response.Content.ReadAsStringAsync();
-                    orderDTO = JsonConvert.DeserializeObject<OrderDTO>(responseBody);
+                    JsonConvert.DeserializeObject<OrderDTO>(responseBody);
                     return true;
                 }
                 else
                 {
-                    Debug.WriteLine("Failed to create order");
+                    Console.WriteLine("Failed to create order");
                     return false;
                 }
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Exception thrown while {nameof(AddOrder)}.", ex);
-                throw;
+                Console.WriteLine($"Exception thrown while {nameof(AddOrder)}.", ex);
             }
+
+            return false;
         }
 
         public async Task<bool> EditOrder(OrderDTO orderDTO)
@@ -63,27 +64,28 @@ namespace Sales.APP.Services
                 if (response.IsSuccessStatusCode)
                 {
                     var responseBody = await response.Content.ReadAsStringAsync();
-                    orderDTO = JsonConvert.DeserializeObject<OrderDTO>(responseBody);
+                    JsonConvert.DeserializeObject<OrderDTO>(responseBody);
                     return true;
                 }
                 else
                 {
-                    Debug.WriteLine("Failed to edit order");
+                    Console.WriteLine("Failed to edit order");
                     return false;
                 }
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Exception thrown while {nameof(EditOrder)}.", ex);
-                throw;
+                Console.WriteLine($"Exception thrown while {nameof(EditOrder)}.", ex);
             }
+
+            return false;
         }
 
-        public async Task<bool> DeleteOrder(OrderDTO orderDTO)
+        public async Task<bool> DeleteOrder(OrderDTO order)
         {
             try
             {
-                var response = await httpClient.DeleteAsync($"api/Orders/{orderDTO.UId}");
+                var response = await httpClient.DeleteAsync($"api/Orders/{order.UId}");
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -91,15 +93,16 @@ namespace Sales.APP.Services
                 }
                 else
                 {
-                    Debug.WriteLine("Failed to delete order");
+                    Console.WriteLine("Failed to delete order");
                     return false;
                 }
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Exception thrown while {nameof(DeleteOrder)}.", ex);
-                throw;
+                Console.WriteLine($"Exception thrown while {nameof(DeleteOrder)}.", ex);
             }
+
+            return false;
         }
     }
 }

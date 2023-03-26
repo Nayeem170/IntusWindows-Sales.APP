@@ -4,8 +4,11 @@ namespace Sales.BLL.Services.Contracts
 {
     public interface IWindowService
     {
-        Task<IEnumerable<Window>> GetWindows();
-        Task<IEnumerable<Window>> GetWindows(Guid orderId);
-        Task<Window?> GetWindow(Guid uid);
+        IEnumerable<Window> GetWindows();
+        IEnumerable<Window> GetWindows(Guid orderId);
+        Window GetWindow(Guid uid);
+        Window AddWindow(Window window);
+        Window EditWindow(Window window);
+        bool DeleteWindow(Guid uid);
     }
 }

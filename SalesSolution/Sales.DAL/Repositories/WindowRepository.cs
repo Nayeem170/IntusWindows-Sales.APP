@@ -1,48 +1,39 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Sales.DAL.Data;
+﻿using Sales.DAL.Data;
 using Sales.DAL.Entities;
 using Sales.DAL.Extentions;
 using Sales.DAL.Repositories.Contracts;
 
 namespace Sales.DAL.Repositories
 {
-    public class WindowRepository : IWindowRepository
+    public class WindowRepository : GenericRepository<Window, SalesDbContext>, IWindowRepository
     {
-        private readonly SalesDbContext salesDbContext;
+        public WindowRepository(SalesDbContext context) : base(context) { }
 
-        public WindowRepository(SalesDbContext salesDbContext)
+        public override IQueryable<Window> GetAll()
         {
-            this.salesDbContext = salesDbContext;
+            return base.GetAll()
+                .IncludeSubElement();
         }
 
-        public async Task<IEnumerable<Window>> GetWindows()
+        public IQueryable<Window> GetAll(Guid orderId)
         {
-            return await salesDbContext.Windows
-                .IncludeSubElement()
-                .ToListAsync();
-        }
-
-        public async Task<IEnumerable<Window>> GetWindowsForOrder(Guid orderId)
-        {
-            return await salesDbContext.Windows
+            return base.GetAll()
                 .Where(window => window.OrderId == orderId)
-                .IncludeSubElement()
-                .ToListAsync();
+                .IncludeSubElement();
         }
 
-        public async Task<IEnumerable<Window>> GetWindowsIncludeAll()
+        public IQueryable<Window> GetAllIncludeAll()
         {
-            return await salesDbContext.Windows
-                .IncludeAll()
-                .ToListAsync();
+            return base.GetAll()
+                .IncludeAll();
         }
 
-        public async Task<Window?> GetWindow(Guid uid)
+        public Window? GetIncludeAll(Guid uid)
         {
-            return await salesDbContext.Windows
+            return base.GetAll()
                 .Where(window => window.UId == uid)
                 .IncludeAll()
-                .FirstOrDefaultAsync();
+                .FirstOrDefault();
         }
     }
 }

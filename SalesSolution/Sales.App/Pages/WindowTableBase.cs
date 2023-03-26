@@ -1,52 +1,56 @@
 ﻿using MatBlazor;
 using Microsoft.AspNetCore.Components;
+using Sales.APP.Enums;
+using Sales.APP.Extentions;
+using Sales.APP.Models;
 using Sales.APP.Services.Contract;
+using Sales.DTO.Extentions;
 using Sales.DTO.Models;
 
 namespace Sales.APP.Pages
 {
     public class WindowTableBase : ComponentBase
     {
+        #region Injects dependencies
         [Inject]
         public IWindowService WindowService { get; set; }
+        [Inject]
+        protected IMatDialogService MatDialogService { get; set; }
+        [Inject]
+        protected IMatToaster Toaster { get; set; }
+        #endregion
+
+        #region Declear parameters
+        [Parameter]
+        public OrderDTO Order { get; set; }
         [Parameter]
         public IEnumerable<WindowDTO> Windows { get; set; }
         [Parameter]
         public EventCallback<WindowDTO> OnWindowSelected { get; set; }
+        [Parameter]
+        public EventCallback<OrderDTO> OnChange { get; set; }
+        #endregion
 
         protected IEnumerable<WindowDTO> DisplayedWindows = new List<WindowDTO>();
-        public IEnumerable<WindowDTO> OldWindows { get; set; }
+        private IEnumerable<WindowDTO> oldWindows { get; set; }
+        public DialogueModel<WindowDTO> DialogueModel { get; set; } = new DialogueModel<WindowDTO>(new WindowDTO());
+
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
 
-            OldWindows = Windows;
+            oldWindows = Windows;
             DisplayedWindows = Windows;
             WindowSearchText = string.Empty;
-        }
-
-        private bool shouldUpdate()
-        {
-            if (OldWindows.Count() != Windows.Count())
-            {
-                return true;
-            }
-
-            var bothEquals = OldWindows.OrderBy(old => old.UId)
-                    .ThenBy(old => old.UpdatedAt)
-                .SequenceEqual(Windows.OrderBy(current => current.UId)
-                    .ThenBy(current => current.UpdatedAt));
-
-            return !bothEquals;
         }
 
         protected override async Task OnParametersSetAsync()
         {
             await base.OnParametersSetAsync();
 
-            if (shouldUpdate())
+            if (!oldWindows.IsEquals(Windows))
             {
-                OldWindows = Windows;
+                oldWindows = Windows;
                 DisplayedWindows = Windows;
                 WindowSearchText = string.Empty;
             }
@@ -114,6 +118,60 @@ namespace Sales.APP.Pages
                     DisplayedWindows = Windows.OrderByDescending(order => order.SubElements.Sum(element => element.Quantity));
                 }
             }
+        }
+
+        public void OpenAddWindowDialogue()
+        {
+            DialogueModel
+                .Clear()
+                .Set("OrderId", Order.UId)
+                .AddDialogue()
+                .Open();
+        }
+
+        public void OpenEditWindowDialogue(WindowDTO window)
+        {
+            DialogueModel
+                .Set(window)
+                .EditDialogue()
+                .Open();
+        }
+
+        public async Task OpenDeleteWindowPopupAsync(WindowDTO window)
+        {
+            var deleteThis = await MatDialogService.ConfirmAsync("Delete this window?");
+            if (deleteThis)
+            {
+                var isDeleted = await WindowService.DeleteWindow(window);
+
+                await OnChange.InvokeAsync();
+
+                Action<string> toastAction = isDeleted ? Toaster.DeleteSuccessful
+                                                        : Toaster.DeleteFailed;
+                toastAction(DataModelType.Window);
+            }
+        }
+
+        protected async Task OnSaveAsync()
+        {
+            DialogueModel.Close();
+
+            var isSuccess = DialogueModel.IsAdd()
+                          ? await WindowService.AddWindow(DialogueModel.ModelDTO)
+                          : await WindowService.EditWindow(DialogueModel.ModelDTO);
+
+            await OnChange.InvokeAsync();
+
+            Action<string> toastAction = isSuccess
+                ? (DialogueModel.IsAdd() ? Toaster.CreateSuccessful : Toaster.UpdateSuccessful)
+                : (DialogueModel.IsAdd() ? Toaster.CreateFailed : Toaster.UpdateFailed);
+
+            toastAction(DataModelType.Window);
+        }
+
+        protected void OnCancel()
+        {
+            DialogueModel.Close();
         }
     }
 }

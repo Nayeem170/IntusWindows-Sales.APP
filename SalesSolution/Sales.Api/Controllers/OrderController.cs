@@ -20,11 +20,11 @@ namespace Sales.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<OrderDTO>>> GetOrders()
+        public ActionResult<IEnumerable<OrderDTO>> GetOrders()
         {
             try
             {
-                var orders = await orderService.GetOrdersAsync();
+                var orders = orderService.GetOrders();
 
                 if (orders.IsNullOrEmpty())
                 {
@@ -45,11 +45,11 @@ namespace Sales.API.Controllers
         }
 
         [HttpGet("{uid:guid}")]
-        public async Task<ActionResult<IEnumerable<OrderDTO>>> GetOrder([FromRoute] Guid uid)
+        public ActionResult<IEnumerable<OrderDTO>> GetOrder([FromRoute] Guid uid)
         {
             try
             {
-                var order = await orderService.GetOrderAsync(uid);
+                var order = orderService.GetOrder(uid);
 
                 if (order.IsNull())
                 {
@@ -70,7 +70,7 @@ namespace Sales.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<IEnumerable<OrderDTO>>> AddOrder([FromBody] OrderDTO orderDTO)
+        public ActionResult<IEnumerable<OrderDTO>> AddOrder([FromBody] OrderDTO orderDTO)
         {
             if (!ModelState.IsValid)
             {
@@ -80,7 +80,7 @@ namespace Sales.API.Controllers
             try
             {
                 var order = orderDTO.ConvertToModel();
-                order = await orderService.AddOrderAsync(order);
+                order = orderService.AddOrder(order);
                 orderDTO = order.ConvertToDto();
                 return Ok(orderDTO);
             }
@@ -115,18 +115,18 @@ namespace Sales.API.Controllers
         }
 
         [HttpDelete("{uid:guid}")]
-        public async Task<ActionResult> DeleteOrderAsync([FromRoute] Guid uid)
+        public ActionResult DeleteOrder([FromRoute] Guid uid)
         {
             try
             {
-                await orderService.DeleteOrderAsync(uid);
+                orderService.DeleteOrder(uid);
                 return Ok();
             }
             catch (Exception ex)
             {
                 Log.Error($"{ex.Message}", ex);
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                    new ErrorResponseDto("Sorry, we can't update order at the moment."));
+                    new ErrorResponseDto("Sorry, we can't delete order at the moment."));
             }
         }
     }

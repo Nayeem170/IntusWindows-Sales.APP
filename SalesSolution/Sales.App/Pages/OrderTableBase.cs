@@ -4,59 +4,52 @@ using Sales.APP.Enums;
 using Sales.APP.Extentions;
 using Sales.APP.Models;
 using Sales.APP.Services.Contract;
+using Sales.DTO.Extentions;
 using Sales.DTO.Models;
 
 namespace Sales.APP.Pages
 {
     public class OrderTableBase : ComponentBase
     {
+        #region Injects dependencies
         [Inject]
         public IOrderService OrderService { get; set; }
         [Inject]
         protected IMatToaster Toaster { get; set; }
         [Inject]
         protected IMatDialogService MatDialogService { get; set; }
+        #endregion
+
+        #region Declear parameters
         [Parameter]
         public IEnumerable<OrderDTO> Orders { get; set; }
         [Parameter]
         public EventCallback<OrderDTO> OnOrderSelected { get; set; }
         [Parameter]
         public EventCallback<OrderDTO> OnChange { get; set; }
+        #endregion
 
-        public DialogueModel<OrderDTO> OrderDialogueModel { get; set; } = new DialogueModel<OrderDTO>(new OrderDTO());
-        public IEnumerable<OrderDTO> OldOrders { get; set; }
+        public DialogueModel<OrderDTO> DialogueModel { get; set; } = new DialogueModel<OrderDTO>(new OrderDTO());
+        private IEnumerable<OrderDTO> oldOrders { get; set; }
+        protected IEnumerable<OrderDTO> DisplayedOrders = new List<OrderDTO>();
+
 
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
 
-            OldOrders = Orders;
+            oldOrders = Orders;
             DisplayedOrders = Orders;
             OrderSearchText = string.Empty;
-        }
-
-        private bool shouldUpdate()
-        {
-            if (OldOrders.Count() != Orders.Count())
-            {
-                return true;
-            }
-
-            var bothEquals = OldOrders.OrderBy(old => old.UId)
-                    .ThenBy(old => old.UpdatedAt)
-                .SequenceEqual(Orders.OrderBy(current => current.UId)
-                    .ThenBy(current => current.UpdatedAt));
-
-            return !bothEquals;
         }
 
         protected override async Task OnParametersSetAsync()
         {
             await base.OnParametersSetAsync();
 
-            if (shouldUpdate())
+            if (!oldOrders.IsEquals(Orders))
             {
-                OldOrders = Orders;
+                oldOrders = Orders;
                 DisplayedOrders = Orders;
                 OrderSearchText = string.Empty;
             }
@@ -80,7 +73,6 @@ namespace Sales.APP.Pages
             }
         }
 
-        protected IEnumerable<OrderDTO> DisplayedOrders = null;
         private void OrderSearchTextOnUpdate(string text)
         {
             if (string.IsNullOrEmpty(text))
@@ -121,7 +113,7 @@ namespace Sales.APP.Pages
 
         public void OpenAddOrderDialogue()
         {
-            OrderDialogueModel
+            DialogueModel
                 .Clear()
                 .AddDialogue()
                 .Open();
@@ -129,7 +121,7 @@ namespace Sales.APP.Pages
 
         public void OpenEditOrderDialogue(OrderDTO order)
         {
-            OrderDialogueModel
+            DialogueModel
                 .Set(order)
                 .EditDialogue()
                 .Open();
@@ -162,24 +154,24 @@ namespace Sales.APP.Pages
 
         protected async Task OnSaveAsync()
         {
-            OrderDialogueModel.Close();
+            DialogueModel.Close();
 
-            var isSuccess = OrderDialogueModel.IsAdd()
-                          ? await OrderService.AddOrder(OrderDialogueModel.ModelDTO)
-                          : await OrderService.EditOrder(OrderDialogueModel.ModelDTO);
+            var isSuccess = DialogueModel.IsAdd()
+                          ? await OrderService.AddOrder(DialogueModel.ModelDTO)
+                          : await OrderService.EditOrder(DialogueModel.ModelDTO);
 
             await OnChange.InvokeAsync();
 
             Action<string> toastAction = isSuccess
-                ? (OrderDialogueModel.IsAdd() ? Toaster.CreateSuccessful : Toaster.UpdateSuccessful)
-                : (OrderDialogueModel.IsAdd() ? Toaster.CreateFailed : Toaster.UpdateFailed);
+                ? (DialogueModel.IsAdd() ? Toaster.CreateSuccessful : Toaster.UpdateSuccessful)
+                : (DialogueModel.IsAdd() ? Toaster.CreateFailed : Toaster.UpdateFailed);
 
             toastAction(DataModelType.Order);
         }
 
         protected void OnCancel()
         {
-            OrderDialogueModel.IsOpen = false;
+            DialogueModel.Close();
         }
     }
 }

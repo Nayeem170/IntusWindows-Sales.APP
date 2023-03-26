@@ -1,4 +1,5 @@
 ﻿using Sales.APP.Enums;
+using System.Reflection;
 
 namespace Sales.APP.Models
 {
@@ -65,6 +66,14 @@ namespace Sales.APP.Models
         public DialogueModel<T> Set(T orderDTO)
         {
             ModelDTO = orderDTO;
+            return this;
+        }
+
+        public DialogueModel<T> Set(string modelPropertyName, object modelPropertyValue)
+        {
+            PropertyInfo property = this.ModelDTO.GetType().GetProperty(modelPropertyName, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
+            property.SetValue(this.ModelDTO, modelPropertyValue, null);
+
             return this;
         }
     }

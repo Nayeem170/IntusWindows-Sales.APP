@@ -13,14 +13,14 @@ namespace Sales.BLL.Services
             this.elementTypeRepository = elementTypeRepository;
         }
 
-        public async Task<IEnumerable<ElementType>> GetElementTypes()
+        public IEnumerable<ElementType> GetElementTypes()
         {
-            return await elementTypeRepository.GetElementTypes();
+            return elementTypeRepository.GetAll();
         }
 
-        public async Task<ElementType?> GetElementType(Guid uid)
+        public ElementType? GetElementType(Guid uid)
         {
-            return await elementTypeRepository.GetElementType(uid);
+            return elementTypeRepository.Get(uid);
         }
     }
 }

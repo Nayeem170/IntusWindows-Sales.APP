@@ -4,7 +4,6 @@ using Sales.APP.Enums;
 using Sales.APP.Extentions;
 using Sales.APP.Services.Contract;
 using Sales.DTO.Models;
-using Sales.LIB.Extentions;
 
 namespace Sales.APP.Pages
 {
@@ -21,32 +20,49 @@ namespace Sales.APP.Pages
 
         public IEnumerable<OrderDTO> Orders { get; set; } = new List<OrderDTO>();
         public IEnumerable<WindowDTO> Windows { get; set; } = new List<WindowDTO>();
-        protected IEnumerable<SubElementDTO> SubElements { get; set; } = new List<SubElementDTO>();
+        public IEnumerable<SubElementDTO> SubElements { get; set; } = new List<SubElementDTO>();
 
+        public OrderDTO CurrentOrder { get; set; } = new OrderDTO();
+        public WindowDTO CurrentWindow { get; set; } = new WindowDTO();
 
         protected override async Task OnInitializedAsync()
         {
-            await LoadOrdersAsync();
-            await LoadWindowsAsync(Orders.FirstOrDefault()?.UId);
-            await LoadSubElementsAsync(Windows.FirstOrDefault()?.UId);
+            await LoadForOrderGrid();
         }
 
         protected async Task OnOrderChangeAsync()
         {
+            await LoadForOrderGrid();
+        }
+
+        private async Task LoadForOrderGrid()
+        {
             await LoadOrdersAsync();
-            await LoadWindowsAsync(Orders.FirstOrDefault()?.UId);
-            await LoadSubElementsAsync(Windows.FirstOrDefault()?.UId);
+            await LoadWindowsAsync(Orders.FirstOrDefault());
+            await LoadSubElementsAsync(Windows.FirstOrDefault());
         }
 
         protected async Task ShowWindowsAsync(OrderDTO order)
         {
-            await LoadWindowsAsync(order.UId);
-            await LoadSubElementsAsync(Windows.FirstOrDefault()?.UId);
+            CurrentOrder = order;
+            await LoadForWindowGrid();
+        }
+
+        protected async Task OnWindowChangeAsync()
+        {
+            await LoadForWindowGrid();
+        }
+
+        private async Task LoadForWindowGrid()
+        {
+            await LoadWindowsAsync(CurrentOrder);
+            await LoadSubElementsAsync(Windows.FirstOrDefault());
         }
 
         protected async Task ShowSubElementsAsync(WindowDTO window)
         {
-            await LoadSubElementsAsync(window.UId);
+            CurrentWindow = window;
+            await LoadSubElementsAsync(window);
         }
 
         private async Task LoadOrdersAsync()
@@ -54,16 +70,19 @@ namespace Sales.APP.Pages
             Orders = await OrderService.GetOrders();
             TestHasItems(Orders);
         }
-        private async Task LoadWindowsAsync(Guid? orderId)
+        private async Task LoadWindowsAsync(OrderDTO order)
         {
-            Windows = orderId.IsNull() ? new List<WindowDTO>()
-                    : await WindowService.GetWindows(orderId.GetValueOrDefault());
+            CurrentOrder = order;
+            Windows = order?.UId == null ? new List<WindowDTO>()
+                    : await WindowService.GetWindows(order.UId);
             TestHasItems(Windows);
         }
-        private async Task LoadSubElementsAsync(Guid? windowId)
+        private async Task LoadSubElementsAsync(WindowDTO window)
         {
-            SubElements = windowId.IsNull() ? new List<SubElementDTO>()
-                    : await SubElementService.GetSubElements(windowId.GetValueOrDefault());
+            CurrentWindow = window;
+
+            SubElements = window?.UId == null ? new List<SubElementDTO>()
+                    : await SubElementService.GetSubElements(window.UId);
             TestHasItems(SubElements);
         }
 

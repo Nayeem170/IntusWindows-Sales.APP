@@ -1,6 +1,7 @@
 ﻿using Sales.BLL.Services.Contracts;
 using Sales.DAL.Entities;
 using Sales.DAL.Repositories.Contracts;
+using Sales.LIB.Extentions;
 
 namespace Sales.BLL.Services
 {
@@ -13,19 +14,41 @@ namespace Sales.BLL.Services
             this.windowRepository = windowRepository;
         }
 
-        public async Task<IEnumerable<Window>> GetWindows()
+        public IEnumerable<Window> GetWindows()
         {
-            return await windowRepository.GetWindows();
+            return windowRepository.GetAll();
         }
 
-        public async Task<IEnumerable<Window>> GetWindows(Guid orderId)
+        public IEnumerable<Window> GetWindows(Guid orderId)
         {
-            return await windowRepository.GetWindowsForOrder(orderId);
+            return windowRepository.GetAll(orderId);
         }
 
-        public Task<Window?> GetWindow(Guid uid)
+        public Window? GetWindow(Guid uid)
         {
-            return windowRepository.GetWindow(uid);
+            return windowRepository.Get(uid);
+        }
+
+        public Window AddWindow(Window window)
+        {
+            return window == null ? throw new ArgumentNullException("Window can not be null")
+                                    : windowRepository.Add(window);
+        }
+
+        public Window EditWindow(Window window)
+        {
+            return window == null ? throw new ArgumentNullException("Window can not be null")
+                                  : windowRepository.Edit(window);
+        }
+
+        public bool DeleteWindow(Guid uid)
+        {
+            var window = GetWindow(uid);
+            if (!window.IsNull())
+            {
+                return windowRepository.Delete(window);
+            }
+            return false;
         }
     }
 }
