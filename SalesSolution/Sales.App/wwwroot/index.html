@@ -11,10 +11,31 @@
     <link href="Sales.APP.styles.css" rel="stylesheet" />
     <script src="_content/MatBlazor/dist/matBlazor.js"></script>
     <link href="_content/MatBlazor/dist/matBlazor.css" rel="stylesheet" />
+    <style>
+        .welcome-page {
+            background-color: green;
+            opacity: 0.8;
+            color: white;
+            height: 100vh;
+        }
+
+        .welcome-page h1 {
+            margin: 0;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+    </style>
 </head>
 
 <body>
-    <div id="app">Welcome to INTUS WINDOWS Sales APP</div>
+    <div id="app">
+        <div class="welcome-page">
+            <h1>Welcome to INTUS WINDOWS - Sales APP</h1>
+        </div>
+    </div>
 
     <div id="blazor-error-ui">
         An unhandled error has occurred.
