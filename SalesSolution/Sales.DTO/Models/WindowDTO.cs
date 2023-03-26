@@ -9,15 +9,15 @@ namespace Sales.DTO.Models
             UId = Guid.NewGuid();
         }
 
-        [Required]
+        [Required(ErrorMessage = "Please enter an window name.")]
         [MaxLength(30, ErrorMessage = "Please enter an window name with a maximum of 30 characters.")]
         public string Name { get; set; }
 
-        [Required]
-        [Range(1, int.MaxValue, ErrorMessage = "Please enter a positive number for the window quantity.")]
+        [Required(ErrorMessage = "Please enter an window quantity.")]
+        [Range(1, int.MaxValue, ErrorMessage = "Please enter a positive quantity for the window.")]
         public int Quantity { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Please enter an window order.")]
         public Guid OrderId { get; set; }
 
         public int? NumberOfSubElements { get; set; }

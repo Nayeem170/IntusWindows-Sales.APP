@@ -72,11 +72,6 @@ namespace Sales.API.Controllers
         [HttpPost]
         public ActionResult<IEnumerable<OrderDTO>> AddOrder([FromBody] OrderDTO orderDTO)
         {
-            if (!ModelState.IsValid)
-            {
-                return UnprocessableEntity(ModelState);
-            }
-
             try
             {
                 var order = orderDTO.ConvertToModel();
@@ -94,11 +89,6 @@ namespace Sales.API.Controllers
         [HttpPut]
         public ActionResult<IEnumerable<OrderDTO>> EditOrder([FromBody] OrderDTO orderDTO)
         {
-            if (!ModelState.IsValid)
-            {
-                return UnprocessableEntity(ModelState);
-            }
-
             try
             {
                 var order = orderDTO.ConvertToModel();

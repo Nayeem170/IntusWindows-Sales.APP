@@ -4,10 +4,12 @@ using Sales.DTO.Models;
 
 namespace Sales.APP.Pages
 {
-    public class WindowDialogBase : ComponentBase
+    public class SubElementDialogBase : ComponentBase
     {
         [Parameter]
-        public DialogueModel<WindowDTO> WindowDialogueModel { get; set; }
+        public IEnumerable<ElementTypeDTO> ElementTypes { get; set; }
+        [Parameter]
+        public DialogueModel<SubElementDTO> SubElementDialogueModel { get; set; }
         [Parameter]
         public EventCallback OnSave { get; set; }
         [Parameter]

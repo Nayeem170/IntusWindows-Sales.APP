@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Net.Http.Headers;
 using Sales.API.Extentions;
+using Sales.BLL.Extentions;
+using Sales.DAL.Repositories.Contracts;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()
@@ -42,6 +44,14 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider.GetRequiredService<ISubElementRepository>;
+    SubElementEnhancer.Configure(services.Invoke());
+}
+
 app.MapControllers();
+
 
 app.Run();

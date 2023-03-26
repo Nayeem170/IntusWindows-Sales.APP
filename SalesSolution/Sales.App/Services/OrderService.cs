@@ -33,7 +33,7 @@ namespace Sales.APP.Services
         {
             try
             {
-                var response = await httpClient.PostAsJsonAsync<OrderDTO>("api/Orders", orderDTO);
+                var response = await httpClient.PostAsJsonAsync("api/Orders", orderDTO);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -59,7 +59,7 @@ namespace Sales.APP.Services
         {
             try
             {
-                var response = await httpClient.PutAsJsonAsync<OrderDTO>("api/Orders", orderDTO);
+                var response = await httpClient.PutAsJsonAsync("api/Orders", orderDTO);
 
                 if (response.IsSuccessStatusCode)
                 {

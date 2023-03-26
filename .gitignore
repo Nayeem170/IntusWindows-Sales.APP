@@ -24,5 +24,6 @@ SalesSolution/Sales.DDL/obj/
 SalesSolution/Sales.BLL/bin/
 SalesSolution/Sales.DTO/obj/
 SalesSolution/Sales.DTO/bin/
-SalesSolution/Sales.LIB/
 SalesSolution/Sales.API/Logs/
+SalesSolution/Sales.LIB/obj/
+SalesSolution/Sales.LIB/bin/

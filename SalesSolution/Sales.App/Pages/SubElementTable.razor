@@ -1,17 +1,23 @@
 ﻿@inherits SubElementTableBase
 
 <p>
-    <MatTextField @bind-Value="@SubElementSearchText" Label="Search" Icon="search"></MatTextField>
+    <MatTextField @bind-Value="SubElementSearchText" Label="Search" Icon="search"></MatTextField>
+    <MatButton Outlined="true" OnClick="OpenAddSubElementDialogue" Icon="add" Style="color: darkblue" Class="float-right">Add</MatButton>
 </p>
 
-<MatTable Items="@DisplayedSubElements" class="mat-elevation-z5" Striped="true" UseSortHeaderRow="true">
+<p></p>
+
+
+
+<MatTable Items="DisplayedSubElements" class="mat-elevation-z5" Striped="true" UseSortHeaderRow="true">
     <MatTableHeader>
-        <MatSortHeaderRow SortChanged="@SortData">
+        <MatSortHeaderRow SortChanged="SortData">
             <MatSortHeader SortId="element">Element</MatSortHeader>
             <MatSortHeader SortId="element-type">Type</MatSortHeader>
             <MatSortHeader SortId="width">Width</MatSortHeader>
             <MatSortHeader SortId="height">Height</MatSortHeader>
             <MatSortHeader SortId="quantity">Quantity</MatSortHeader>
+            <MatSortHeader SortId="action">Action</MatSortHeader>
         </MatSortHeaderRow>
     </MatTableHeader>
     <MatTableRow>
@@ -20,6 +26,28 @@
         <td>@context.Width</td>
         <td>@context.Height</td>
         <td>@context.Quantity</td>
+        <td>
+            <MatButton Outlined="true" OnClick="@(_ => OpenEditSubElementDialogue(@context))" Icon="edit" Style="color: darkorange">Edit</MatButton>
+            <MatButton Outlined="true" OnClick="@(_ => OpenDeleteSubElementPopupAsync(@context))" Icon="delete" Style="color: darkred">Delete</MatButton>
+        </td>
     </MatTableRow>
 </MatTable>
+
+@if (!SubElements.Any())
+{
+    <i>There are no sub elements available to display</i>
+}
+
 <p></p>
+
+<SubElementDialog
+    ElementTypes="ElementTypes" 
+    SubElementDialogueModel="SubElementDialogueModel"
+    OnSave="OnSaveAsync"
+    OnCancel="OnCancel"></SubElementDialog>
+
+<style>
+    .float-right {
+        float: right;
+    }
+</style>

@@ -1,18 +1,18 @@
 ﻿@inherits OrderDialogBase
 
-<MatDialog @bind-IsOpen="@DialogueModel.IsOpen" CanBeClosed=false>
-    <EditForm Model="DialogueModel.ModelDTO" OnValidSubmit="@OnSave">
+<MatDialog @bind-IsOpen="@OrderDialogueModel.IsOpen" CanBeClosed=false>
+    <EditForm Model="OrderDialogueModel.ModelDTO" OnValidSubmit="@OnSave">
         <DataAnnotationsValidator />
-        <MatDialogTitle>@DialogueModel.ActionType Order</MatDialogTitle>
+        <MatDialogTitle>@OrderDialogueModel.ActionType Order</MatDialogTitle>
         <MatDialogContent>
                 <div class="margin-top-15">
                 <p>
-                    <MatTextField @bind-Value="@DialogueModel.ModelDTO.State" Label="State" Class="width-500"></MatTextField>
-                    <ValidationMessage For="@(() => DialogueModel.ModelDTO.State)" />
+                    <MatTextField @bind-Value="@OrderDialogueModel.ModelDTO.State" Label="State" Class="width-500"></MatTextField>
+                    <ValidationMessage For="@(() => OrderDialogueModel.ModelDTO.State)" />
                 </p>
                 <p>
-                    <MatTextField @bind-Value="@DialogueModel.ModelDTO.Name" Label="Name" Class="width-500"></MatTextField>
-                    <ValidationMessage For="@(() => DialogueModel.ModelDTO.Name)" />
+                    <MatTextField @bind-Value="@OrderDialogueModel.ModelDTO.Name" Label="Name" Class="width-500"></MatTextField>
+                    <ValidationMessage For="@(() => OrderDialogueModel.ModelDTO.Name)" />
                 </p>
             </div>
         </MatDialogContent>

@@ -9,7 +9,7 @@ namespace Sales.DAL.Entities
         public string Name { get; set; }
 
         [Required]
-        [MaxLength(2)]
+        [StringLength(maximumLength: 2, MinimumLength = 2)]
         public string State { get; set; }
 
         public IEnumerable<Window> Windows { get; set; } = new List<Window>();

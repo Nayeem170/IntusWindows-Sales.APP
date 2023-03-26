@@ -10,6 +10,7 @@ namespace Sales.DAL.Entities
         [Required]
         [Range(1, int.MaxValue)]
         public int Quantity { get; set; }
+        [Required]
         public Guid OrderId { get; set; }
 
         public Order Order { get; set; }

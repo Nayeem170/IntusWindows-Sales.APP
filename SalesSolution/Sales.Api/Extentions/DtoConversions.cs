@@ -59,7 +59,8 @@ namespace Sales.API.Extentions
                 Height = subElement.Height,
                 Width = subElement.Width,
                 CreatedAt = subElement.CreatedAt,
-                UpdatedAt = subElement.UpdatedAt
+                UpdatedAt = subElement.UpdatedAt,
+                WindowId = subElement.WindowId
             };
         }
 
@@ -137,7 +138,8 @@ namespace Sales.API.Extentions
                 Height = subElementDTO.Height,
                 Width = subElementDTO.Width,
                 CreatedAt = subElementDTO.CreatedAt,
-                UpdatedAt = subElementDTO.UpdatedAt
+                UpdatedAt = subElementDTO.UpdatedAt,
+                WindowId = subElementDTO.WindowId
             };
         }
     }

@@ -1,18 +1,18 @@
 ﻿@inherits WindowDialogBase
 
-<MatDialog @bind-IsOpen="@DialogueModel.IsOpen" CanBeClosed=false>
-    <EditForm Model="DialogueModel.ModelDTO" OnValidSubmit="@OnSave">
+<MatDialog @bind-IsOpen="@WindowDialogueModel.IsOpen" CanBeClosed=false>
+    <EditForm Model="WindowDialogueModel.ModelDTO" OnValidSubmit="@OnSave">
         <DataAnnotationsValidator />
-        <MatDialogTitle>@DialogueModel.ActionType Window</MatDialogTitle>
+        <MatDialogTitle>@WindowDialogueModel.ActionType Window</MatDialogTitle>
         <MatDialogContent>
                 <div class="margin-top-15">
                 <p>
-                    <MatTextField @bind-Value="@DialogueModel.ModelDTO.Name" Label="Name" Class="width-500"></MatTextField>
-                    <ValidationMessage For="@(() => DialogueModel.ModelDTO.Name)" />
+                    <MatTextField @bind-Value="@WindowDialogueModel.ModelDTO.Name" Label="Name" Class="width-500"></MatTextField>
+                    <ValidationMessage For="@(() => WindowDialogueModel.ModelDTO.Name)" />
                 </p>
                 <p>
-                    <MatTextField @bind-Value="@DialogueModel.ModelDTO.Quantity" Label="Quantity" Class="width-500"></MatTextField>
-                    <ValidationMessage For="@(() => DialogueModel.ModelDTO.Quantity)" />
+                    <MatTextField @bind-Value="@WindowDialogueModel.ModelDTO.Quantity" Label="Quantity" Class="width-500"></MatTextField>
+                    <ValidationMessage For="@(() => WindowDialogueModel.ModelDTO.Quantity)" />
                 </p>
             </div>
         </MatDialogContent>

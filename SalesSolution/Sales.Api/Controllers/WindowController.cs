@@ -96,13 +96,8 @@ namespace Sales.API.Controllers
         }
 
         [HttpPost]
-        public ActionResult<IEnumerable<WindowDTO>> AddOrder([FromBody] WindowDTO windowDTO)
+        public ActionResult<IEnumerable<WindowDTO>> AddWindow([FromBody] WindowDTO windowDTO)
         {
-            if (!ModelState.IsValid)
-            {
-                return UnprocessableEntity(ModelState);
-            }
-
             try
             {
                 var window = windowDTO.ConvertToModel();
@@ -118,13 +113,8 @@ namespace Sales.API.Controllers
             }
         }
         [HttpPut]
-        public ActionResult<IEnumerable<WindowDTO>> EditOrder([FromBody] WindowDTO windowDTO)
+        public ActionResult<IEnumerable<WindowDTO>> EditWindow([FromBody] WindowDTO windowDTO)
         {
-            if (!ModelState.IsValid)
-            {
-                return UnprocessableEntity(ModelState);
-            }
-
             try
             {
                 var window = windowDTO.ConvertToModel();

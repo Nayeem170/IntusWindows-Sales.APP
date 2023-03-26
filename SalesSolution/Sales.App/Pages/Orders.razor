@@ -4,7 +4,7 @@
 
 <div class="mat-layout-grid">
     <div class="mat-layout-grid-inner">
-        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
+        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-4">
             @if (Orders.IsNull())
             {
                 <h3>Loading orders...</h3>
@@ -12,17 +12,25 @@
             else
             {
                 <h3 class="mb-5">All Orders</h3>
+                <p><b>Double-click on an order to open its window</b></p>
+                <p></p>
                 <OrderTable Orders="Orders" OnOrderSelected="ShowWindowsAsync" OnChange="OnOrderChangeAsync"></OrderTable>
             }
         </div>
-        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
+        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-8">
             @if (Windows.IsNull())
             {
                 <h3>Loading windows...</h3>
             }
+            else if (CurrentOrder == null)
+            {
+                <h3>Please select an order first</h3>
+            }
             else
             {
-                <h3 class="mb-5">Windows of @CurrentOrder.Name (@CurrentOrder.State)</h3>
+                <h3 class="mb-5">Windows of "@CurrentOrder.Name (@CurrentOrder.State)"</h3>
+                <p><b>Double-click on a window to open its sub elements</b></p>
+                <p></p>
                 <WindowTable Order="CurrentOrder" Windows="Windows" OnWindowSelected="ShowSubElementsAsync" OnChange="OnWindowChangeAsync"></WindowTable>
             }
 
@@ -30,10 +38,19 @@
             {
                 <h3>Loading sub elements...</h3>
             }
+            else if (CurrentWindow == null)
+            {
+                <h3>Please select a window first</h3>
+            }
             else
             {
-                <h3 class="mb-5">Sub elements of selected Window</h3>
-                <SubElementTable SubElements="SubElements"></SubElementTable>
+                <h3 class="mb-5">Sub elements of "@CurrentWindow.Name (@CurrentWindow.Quantity)"</h3>
+                <SubElementTable 
+                    Window="CurrentWindow" 
+                    SubElements="SubElements" 
+                    ElementTypes="ElementTypes"
+                    OnChange="OnSubElementChangeAsync">
+                </SubElementTable>
             }
         </div>
     </div>

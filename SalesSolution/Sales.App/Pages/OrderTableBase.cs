@@ -29,7 +29,7 @@ namespace Sales.APP.Pages
         public EventCallback<OrderDTO> OnChange { get; set; }
         #endregion
 
-        public DialogueModel<OrderDTO> DialogueModel { get; set; } = new DialogueModel<OrderDTO>(new OrderDTO());
+        public DialogueModel<OrderDTO> OrderDialogueModel { get; set; } = new DialogueModel<OrderDTO>(new OrderDTO());
         private IEnumerable<OrderDTO> oldOrders { get; set; }
         protected IEnumerable<OrderDTO> DisplayedOrders = new List<OrderDTO>();
 
@@ -113,7 +113,7 @@ namespace Sales.APP.Pages
 
         public void OpenAddOrderDialogue()
         {
-            DialogueModel
+            OrderDialogueModel
                 .Clear()
                 .AddDialogue()
                 .Open();
@@ -121,7 +121,7 @@ namespace Sales.APP.Pages
 
         public void OpenEditOrderDialogue(OrderDTO order)
         {
-            DialogueModel
+            OrderDialogueModel
                 .Set(order)
                 .EditDialogue()
                 .Open();
@@ -154,24 +154,27 @@ namespace Sales.APP.Pages
 
         protected async Task OnSaveAsync()
         {
-            DialogueModel.Close();
 
-            var isSuccess = DialogueModel.IsAdd()
-                          ? await OrderService.AddOrder(DialogueModel.ModelDTO)
-                          : await OrderService.EditOrder(DialogueModel.ModelDTO);
+            var isSuccess = OrderDialogueModel.IsAdd()
+                          ? await OrderService.AddOrder(OrderDialogueModel.ModelDTO)
+                          : await OrderService.EditOrder(OrderDialogueModel.ModelDTO);
 
-            await OnChange.InvokeAsync();
+            if (isSuccess)
+            {
+                await OnChange.InvokeAsync();
+                OrderDialogueModel.Close();
+            }
 
             Action<string> toastAction = isSuccess
-                ? (DialogueModel.IsAdd() ? Toaster.CreateSuccessful : Toaster.UpdateSuccessful)
-                : (DialogueModel.IsAdd() ? Toaster.CreateFailed : Toaster.UpdateFailed);
+                ? (OrderDialogueModel.IsAdd() ? Toaster.CreateSuccessful : Toaster.UpdateSuccessful)
+                : (OrderDialogueModel.IsAdd() ? Toaster.CreateFailed : Toaster.UpdateFailed);
 
             toastAction(DataModelType.Order);
         }
 
         protected void OnCancel()
         {
-            DialogueModel.Close();
+            OrderDialogueModel.Close();
         }
     }
 }

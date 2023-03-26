@@ -59,5 +59,13 @@ namespace Sales.APP.Extentions
                 title: "DELETE FAILED",
                 type: MatToastType.Danger);
         }
+
+        public static void BadRequest(this IMatToaster toaster, string message)
+        {
+            toaster.Add(
+                message: message,
+                title: "BAD REQUEST",
+                type: MatToastType.Danger);
+        }
     }
 }

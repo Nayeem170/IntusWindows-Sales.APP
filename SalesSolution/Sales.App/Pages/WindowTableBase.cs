@@ -33,7 +33,7 @@ namespace Sales.APP.Pages
 
         protected IEnumerable<WindowDTO> DisplayedWindows = new List<WindowDTO>();
         private IEnumerable<WindowDTO> oldWindows { get; set; }
-        public DialogueModel<WindowDTO> DialogueModel { get; set; } = new DialogueModel<WindowDTO>(new WindowDTO());
+        public DialogueModel<WindowDTO> WindowDialogueModel { get; set; } = new DialogueModel<WindowDTO>(new WindowDTO());
 
         protected override async Task OnInitializedAsync()
         {
@@ -122,7 +122,7 @@ namespace Sales.APP.Pages
 
         public void OpenAddWindowDialogue()
         {
-            DialogueModel
+            WindowDialogueModel
                 .Clear()
                 .Set("OrderId", Order.UId)
                 .AddDialogue()
@@ -131,7 +131,7 @@ namespace Sales.APP.Pages
 
         public void OpenEditWindowDialogue(WindowDTO window)
         {
-            DialogueModel
+            WindowDialogueModel
                 .Set(window)
                 .EditDialogue()
                 .Open();
@@ -154,24 +154,27 @@ namespace Sales.APP.Pages
 
         protected async Task OnSaveAsync()
         {
-            DialogueModel.Close();
 
-            var isSuccess = DialogueModel.IsAdd()
-                          ? await WindowService.AddWindow(DialogueModel.ModelDTO)
-                          : await WindowService.EditWindow(DialogueModel.ModelDTO);
+            var isSuccess = WindowDialogueModel.IsAdd()
+                          ? await WindowService.AddWindow(WindowDialogueModel.ModelDTO)
+                          : await WindowService.EditWindow(WindowDialogueModel.ModelDTO);
 
-            await OnChange.InvokeAsync();
+            if (isSuccess)
+            {
+                await OnChange.InvokeAsync();
+                WindowDialogueModel.Close();
+            }
 
             Action<string> toastAction = isSuccess
-                ? (DialogueModel.IsAdd() ? Toaster.CreateSuccessful : Toaster.UpdateSuccessful)
-                : (DialogueModel.IsAdd() ? Toaster.CreateFailed : Toaster.UpdateFailed);
+                ? (WindowDialogueModel.IsAdd() ? Toaster.CreateSuccessful : Toaster.UpdateSuccessful)
+                : (WindowDialogueModel.IsAdd() ? Toaster.CreateFailed : Toaster.UpdateFailed);
 
             toastAction(DataModelType.Window);
         }
 
         protected void OnCancel()
         {
-            DialogueModel.Close();
+            WindowDialogueModel.Close();
         }
     }
 }

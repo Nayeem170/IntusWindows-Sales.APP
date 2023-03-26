@@ -7,7 +7,7 @@ namespace Sales.APP.Pages
     public class OrderDialogBase : ComponentBase
     {
         [Parameter]
-        public DialogueModel<OrderDTO> DialogueModel { get; set; }
+        public DialogueModel<OrderDTO> OrderDialogueModel { get; set; }
         [Parameter]
         public EventCallback OnSave { get; set; }
         [Parameter]

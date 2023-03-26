@@ -5,12 +5,14 @@
     <MatButton Outlined="true" OnClick="@OpenAddOrderDialogue" Icon="add" Style="color: darkblue" Class="float-right">Add</MatButton>
 </p>
 
-<MatTable   Items="@DisplayedOrders" 
-            AllowSelection="true" 
-            Striped="true" 
-            UseSortHeaderRow="true"
-            OnRowDbClick="OnRowDbClick"
-            PageSize="10"
+<p></p>
+
+<MatTable Items="@DisplayedOrders"
+        AllowSelection="true"
+        Striped="true"
+        UseSortHeaderRow="true"
+        OnRowDbClick="OnRowDbClick"
+        PageSize="10"
             class="mat-elevation-z5">
     <MatTableHeader>
         <MatSortHeaderRow SortChanged="@SortData">
@@ -28,9 +30,15 @@
         </td>
     </MatTableRow>
 </MatTable>
+
+@if (!Orders.Any())
+{
+    <i>There are no orders available to display</i>
+}
+
 <p></p>
 
-<OrderDialog DialogueModel="@DialogueModel"
+<OrderDialog OrderDialogueModel="@OrderDialogueModel"
              OnSave="@OnSaveAsync"
              OnCancel="@OnCancel"></OrderDialog>
 

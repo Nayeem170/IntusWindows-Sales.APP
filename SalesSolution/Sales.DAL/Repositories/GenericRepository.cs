@@ -38,10 +38,22 @@ namespace Sales.DAL.Repositories
             return entity;
         }
 
+        public virtual IEnumerable<S> Edit(IEnumerable<S> entities)
+        {
+            context.UpdateRange(entities);
+            context.SaveChangesAsync();
+            return entities;
+        }
+
         public virtual bool Delete(S entity)
         {
             context.Remove(entity);
-            return context.SaveChanges() == 1;
+            return context.SaveChanges() > 0;
+        }
+
+        public virtual void Detach(S entity)
+        {
+            context.Entry(entity).State = EntityState.Detached;
         }
     }
 }

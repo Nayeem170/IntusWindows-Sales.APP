@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Sales.API.Extentions;
+using Sales.BLL.Exceptions;
 using Sales.BLL.Services.Contracts;
 using Sales.DAL.Entities;
 using Sales.DTO.Models;
 using Sales.LIB.Extentions;
+using Serilog;
 
 namespace Sales.API.Controllers
 {
@@ -88,6 +90,61 @@ namespace Sales.API.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
                     "Error retriving data from the database");
+            }
+        }
+
+        [HttpPost]
+        public ActionResult<IEnumerable<SubElementDTO>> AddSubElement([FromBody] SubElementDTO subElementDTO)
+        {
+            try
+            {
+                var subElement = subElementDTO.ConvertToModel();
+                subElement = subElementService.AddSubElement(subElement);
+                subElementDTO = subElement.ConvertToDto();
+                return Ok(subElementDTO);
+            }
+            catch (BLLValidationException ex)
+            {
+                return BadRequest(new ErrorResponseDto(ex.Message));
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"{ex.Message}", ex);
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    new ErrorResponseDto("Sorry, we can't create sub element at the moment."));
+            }
+        }
+        [HttpPut]
+        public ActionResult<IEnumerable<SubElementDTO>> EditWindow([FromBody] SubElementDTO subElementDTO)
+        {
+            try
+            {
+                var subElement = subElementDTO.ConvertToModel();
+                subElement = subElementService.EditSubElement(subElement);
+                subElementDTO = subElement.ConvertToDto();
+                return Ok(subElementDTO);
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"{ex.Message}", ex);
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    new ErrorResponseDto("Sorry, we can't update sub element at the moment."));
+            }
+        }
+
+        [HttpDelete("{uid:guid}")]
+        public ActionResult DeleteSubElement([FromRoute] Guid uid)
+        {
+            try
+            {
+                subElementService.DeleteSubElement(uid);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"{ex.Message}", ex);
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    new ErrorResponseDto("Sorry, we can't delete sub element at the moment."));
             }
         }
     }

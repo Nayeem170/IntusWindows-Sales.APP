@@ -5,11 +5,13 @@
     <MatButton Outlined="true" OnClick="@OpenAddWindowDialogue" Icon="add" Style="color: darkblue" Class="float-right">Add</MatButton>
 </p>
 
-<MatTable Items="@DisplayedWindows" AllowSelection="true" 
-                                    Striped="true" 
-                                    UseSortHeaderRow="true" 
-                                    OnRowDbClick="OnRowDbClickAsync" 
-                                    class="mat-elevation-z5">
+<p></p>
+
+<MatTable Items="@DisplayedWindows" AllowSelection="true"
+        Striped="true"
+        UseSortHeaderRow="true"
+        OnRowDbClick="OnRowDbClickAsync"
+            class="mat-elevation-z5">
     <MatTableHeader>
         <MatSortHeaderRow SortChanged="@SortData">
             <MatSortHeader SortId="name">Name</MatSortHeader>
@@ -28,8 +30,18 @@
         </td>
     </MatTableRow>
 </MatTable>
+@if (!Windows.Any())
+{
+    <i>There are no windows available to display</i>
+}
 <p></p>
 
-<WindowDialog DialogueModel="@DialogueModel"
+<WindowDialog WindowDialogueModel="@WindowDialogueModel"
              OnSave="@OnSaveAsync"
              OnCancel="@OnCancel"></WindowDialog>
+
+<style>
+    .float-right {
+        float: right;
+    }
+</style>

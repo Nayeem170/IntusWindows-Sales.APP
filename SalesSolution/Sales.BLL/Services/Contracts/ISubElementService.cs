@@ -7,5 +7,8 @@ namespace Sales.BLL.Services.Contracts
         IEnumerable<SubElement> GetSubElements();
         IEnumerable<SubElement> GetSubElements(Guid windowId);
         SubElement? GetSubElement(Guid uid);
+        SubElement AddSubElement(SubElement subElement);
+        SubElement EditSubElement(SubElement subElement);
+        bool DeleteSubElement(Guid uid);
     }
 }

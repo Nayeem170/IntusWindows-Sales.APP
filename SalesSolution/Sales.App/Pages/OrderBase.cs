@@ -16,11 +16,14 @@ namespace Sales.APP.Pages
         [Inject]
         public ISubElementService SubElementService { get; set; }
         [Inject]
+        public IElementTypeService ElementTypeService { get; set; }
+        [Inject]
         protected IMatToaster Toaster { get; set; }
 
-        public IEnumerable<OrderDTO> Orders { get; set; } = new List<OrderDTO>();
-        public IEnumerable<WindowDTO> Windows { get; set; } = new List<WindowDTO>();
-        public IEnumerable<SubElementDTO> SubElements { get; set; } = new List<SubElementDTO>();
+        public IEnumerable<OrderDTO> Orders { get; set; } = null;
+        public IEnumerable<WindowDTO> Windows { get; set; } = null;
+        public IEnumerable<SubElementDTO> SubElements { get; set; } = null;
+        public IEnumerable<ElementTypeDTO> ElementTypes { get; set; } = null;
 
         public OrderDTO CurrentOrder { get; set; } = new OrderDTO();
         public WindowDTO CurrentWindow { get; set; } = new WindowDTO();
@@ -28,6 +31,8 @@ namespace Sales.APP.Pages
         protected override async Task OnInitializedAsync()
         {
             await LoadForOrderGrid();
+
+            ElementTypes = await ElementTypeService.GetElementTypes();
         }
 
         protected async Task OnOrderChangeAsync()
@@ -63,6 +68,17 @@ namespace Sales.APP.Pages
         {
             CurrentWindow = window;
             await LoadSubElementsAsync(window);
+        }
+
+        protected async Task OnSubElementChangeAsync()
+        {
+            await LoadForSubElementGrid();
+            await LoadWindowsAsync(CurrentOrder);
+        }
+
+        private async Task LoadForSubElementGrid()
+        {
+            await LoadSubElementsAsync(CurrentWindow);
         }
 
         private async Task LoadOrdersAsync()

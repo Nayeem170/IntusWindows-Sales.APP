@@ -10,6 +10,7 @@ namespace Sales.APP.Extentions
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IWindowService, WindowService>();
             services.AddScoped<ISubElementService, SubElementService>();
+            services.AddScoped<IElementTypeService, ElementTypeService>();
         }
     }
 }
