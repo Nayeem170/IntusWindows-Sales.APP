@@ -63,6 +63,7 @@ namespace Sales.APP.Pages
                 OldSubElements = SubElements;
                 DisplayedSubElements = SubElements;
                 SubElementSearchText = string.Empty;
+                SortData(previousSortChangedEvent);
             }
         }
 
@@ -95,8 +96,12 @@ namespace Sales.APP.Pages
             }
         }
 
+        private MatSortChangedEvent previousSortChangedEvent = new MatSortChangedEvent();
+
         protected void SortData(MatSortChangedEvent sort)
         {
+            previousSortChangedEvent = sort;
+
             if (!(sort == null || sort.Direction == MatSortDirection.None || string.IsNullOrEmpty(sort.SortId)))
             {
 
@@ -155,6 +160,11 @@ namespace Sales.APP.Pages
 
         protected async Task OnSaveAsync()
         {
+            if (!SubElementDialogueModel.IsOpen)
+            {
+                return;
+            }
+
             var isSuccess = SubElementDialogueModel.IsAdd()
                           ? await SubElementService.AddSubElement(SubElementDialogueModel.ModelDTO)
                           : await SubElementService.EditSubElement(SubElementDialogueModel.ModelDTO);

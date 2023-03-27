@@ -117,7 +117,9 @@ namespace Sales.API.Controllers
         {
             try
             {
-                var window = windowDTO.ConvertToModel();
+                var window = windowDTO
+                    .ConvertToModel()
+                    .ClearSubElements();
                 window = windowService.EditWindow(window);
                 windowDTO = window.ConvertToDto();
                 return Ok(windowDTO);

@@ -53,6 +53,7 @@ namespace Sales.APP.Pages
                 oldWindows = Windows;
                 DisplayedWindows = Windows;
                 WindowSearchText = string.Empty;
+                SortData(previousSortChangedEvent);
             }
         }
 
@@ -88,8 +89,12 @@ namespace Sales.APP.Pages
             }
         }
 
+        private MatSortChangedEvent previousSortChangedEvent = new MatSortChangedEvent();
+
         protected void SortData(MatSortChangedEvent sort)
         {
+            previousSortChangedEvent = sort;
+
             if (!(sort == null || sort.Direction == MatSortDirection.None || string.IsNullOrEmpty(sort.SortId)))
             {
 
@@ -154,6 +159,10 @@ namespace Sales.APP.Pages
 
         protected async Task OnSaveAsync()
         {
+            if (!WindowDialogueModel.IsOpen)
+            {
+                return;
+            }
 
             var isSuccess = WindowDialogueModel.IsAdd()
                           ? await WindowService.AddWindow(WindowDialogueModel.ModelDTO)
@@ -170,6 +179,8 @@ namespace Sales.APP.Pages
                 : (WindowDialogueModel.IsAdd() ? Toaster.CreateFailed : Toaster.UpdateFailed);
 
             toastAction(DataModelType.Window);
+
+            await OnWindowSelected.InvokeAsync(WindowDialogueModel.ModelDTO);
         }
 
         protected void OnCancel()

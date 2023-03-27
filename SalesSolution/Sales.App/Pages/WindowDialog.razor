@@ -11,7 +11,7 @@
                     <ValidationMessage For="@(() => WindowDialogueModel.ModelDTO.Name)" />
                 </p>
                 <p>
-                    <MatNumericUpDownField @bind-Value="@WindowDialogueModel.ModelDTO.Quantity" Label="Quantity" FullWidth=true DecimalPlaces=0 Minimum =1 Maximum=int.MaxValue></MatNumericUpDownField>
+                    <MatTextField @bind-Value="@WindowDialogueModel.ModelDTO.Quantity" Label="Quantity" FullWidth=true></MatTextField>
                     <ValidationMessage For="@(() => WindowDialogueModel.ModelDTO.Quantity)" />
                 </p>
             </div>
@@ -23,22 +23,3 @@
     </EditForm>
 
 </MatDialog>
-
-<style>
-    .margin-right-15
-    {
-        margin-right: 15px !important;
-    }
-    .margin-left-15
-    {
-        margin-left: 15px !important;
-    } 
-    .margin-top-15
-    {
-        margin-top: 15px !important;
-    }
-    .margin-bottom-15
-    {
-        margin-bottom: 15px !important;
-    }
-</style>
