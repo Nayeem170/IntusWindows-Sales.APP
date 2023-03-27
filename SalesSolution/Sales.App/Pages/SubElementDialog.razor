@@ -4,14 +4,14 @@
     <EditForm Model="SubElementDialogueModel.ModelDTO" OnValidSubmit="@OnSave">
         <DataAnnotationsValidator />
         <MatDialogTitle>@SubElementDialogueModel.ActionType Sub element</MatDialogTitle>
-        <MatDialogContent>
+        <MatDialogContent Class="width-500">
             <div class="margin-top-15">
                 <p>
-                    <MatTextField @bind-Value="@SubElementDialogueModel.ModelDTO.Width" Label="Width" Class="width-500"></MatTextField>
+                    <MatNumericUpDownField @bind-Value="@SubElementDialogueModel.ModelDTO.Width" Label="Width" FullWidth=true DecimalPlaces=0 Minimum=1 Maximum=int.MaxValue></MatNumericUpDownField>
                     <ValidationMessage For="@(() => SubElementDialogueModel.ModelDTO.Width)" />
                 </p>
                 <p>
-                    <MatTextField @bind-Value="@SubElementDialogueModel.ModelDTO.Height" Label="Height" Class="width-500"></MatTextField>
+                    <MatNumericUpDownField @bind-Value="@SubElementDialogueModel.ModelDTO.Height" Label="Height" FullWidth=true DecimalPlaces=0 Minimum=1 Maximum=int.MaxValue></MatNumericUpDownField>
                     @if (SubElementDialogueModel.ActionType == FormActionType.Edit)
                     {
                         <i style="color: red">Attention! All window elements will be updated with new height value.</i>
@@ -19,16 +19,16 @@
                     <ValidationMessage For="@(() => SubElementDialogueModel.ModelDTO.Height)" />
                 </p>
                 <p>
-                    <MatSelect @bind-Value="@SubElementDialogueModel.ModelDTO.ElementTypeId" Label="Type" Class="width-500">
+                    <MatSelect @bind-Value="@SubElementDialogueModel.ModelDTO.ElementTypeId" Label="Type" FullWidth=true>
                         @foreach (var elementType in ElementTypes)
                         {
-                            <MatOption TValue="Guid" Value="elementType.UId" Class="width-500">@elementType.Name</MatOption>
+                            <MatOption TValue="Guid" Value="elementType.UId">@elementType.Name</MatOption>
                         }
                     </MatSelect>
                     <ValidationMessage For="@(() => SubElementDialogueModel.ModelDTO.ElementTypeId)" />
                 </p>
                 <p>
-                    <MatTextField @bind-Value="@SubElementDialogueModel.ModelDTO.Quantity" Label="Quantity" Class="width-500"></MatTextField>
+                    <MatNumericUpDownField @bind-Value="@SubElementDialogueModel.ModelDTO.Quantity" Label="Quantity" FullWidth=true DecimalPlaces=0 Minimum=1 Maximum=int.MaxValue></MatNumericUpDownField>
                     <ValidationMessage For="@(() => SubElementDialogueModel.ModelDTO.Quantity)" />
                 </p>
             </div>
@@ -57,9 +57,5 @@
     .margin-bottom-15
     {
         margin-bottom: 15px !important;
-    }
-    .width-500
-    {
-        width: 500px !important;
     }
 </style>

@@ -4,14 +4,14 @@
     <EditForm Model="WindowDialogueModel.ModelDTO" OnValidSubmit="@OnSave">
         <DataAnnotationsValidator />
         <MatDialogTitle>@WindowDialogueModel.ActionType Window</MatDialogTitle>
-        <MatDialogContent>
-                <div class="margin-top-15">
+        <MatDialogContent Class="width-500">
+            <div class="margin-top-15">
                 <p>
-                    <MatTextField @bind-Value="@WindowDialogueModel.ModelDTO.Name" Label="Name" Class="width-500"></MatTextField>
+                    <MatTextField @bind-Value="@WindowDialogueModel.ModelDTO.Name" Label="Name" FullWidth=true></MatTextField>
                     <ValidationMessage For="@(() => WindowDialogueModel.ModelDTO.Name)" />
                 </p>
                 <p>
-                    <MatTextField @bind-Value="@WindowDialogueModel.ModelDTO.Quantity" Label="Quantity" Class="width-500"></MatTextField>
+                    <MatNumericUpDownField @bind-Value="@WindowDialogueModel.ModelDTO.Quantity" Label="Quantity" FullWidth=true DecimalPlaces=0 Minimum =1 Maximum=int.MaxValue></MatNumericUpDownField>
                     <ValidationMessage For="@(() => WindowDialogueModel.ModelDTO.Quantity)" />
                 </p>
             </div>
@@ -40,9 +40,5 @@
     .margin-bottom-15
     {
         margin-bottom: 15px !important;
-    }
-    .width-500
-    {
-        width: 500px !important;
     }
 </style>
