@@ -142,5 +142,11 @@ namespace Sales.API.Extentions
                 WindowId = subElementDTO.WindowId
             };
         }
+
+        public static Window ClearSubElements(this Window window)
+        {
+            window.SubElements = new List<SubElement>();
+            return window;
+        }
     }
 }

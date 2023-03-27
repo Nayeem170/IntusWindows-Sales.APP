@@ -52,6 +52,7 @@ namespace Sales.APP.Pages
                 oldOrders = Orders;
                 DisplayedOrders = Orders;
                 OrderSearchText = string.Empty;
+                SortData(previousSortChangedEvent);
             }
         }
 
@@ -87,8 +88,12 @@ namespace Sales.APP.Pages
             }
         }
 
+        private MatSortChangedEvent previousSortChangedEvent = new MatSortChangedEvent();
+
         protected void SortData(MatSortChangedEvent sort)
         {
+            previousSortChangedEvent = sort;
+
             if (!(sort == null || sort.Direction == MatSortDirection.None || string.IsNullOrEmpty(sort.SortId)))
             {
 
@@ -154,6 +159,10 @@ namespace Sales.APP.Pages
 
         protected async Task OnSaveAsync()
         {
+            if (!OrderDialogueModel.IsOpen)
+            {
+                return;
+            }
 
             var isSuccess = OrderDialogueModel.IsAdd()
                           ? await OrderService.AddOrder(OrderDialogueModel.ModelDTO)
@@ -170,6 +179,8 @@ namespace Sales.APP.Pages
                 : (OrderDialogueModel.IsAdd() ? Toaster.CreateFailed : Toaster.UpdateFailed);
 
             toastAction(DataModelType.Order);
+
+            await OnOrderSelected.InvokeAsync(OrderDialogueModel.ModelDTO);
         }
 
         protected void OnCancel()

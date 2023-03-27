@@ -4,14 +4,14 @@
     <EditForm Model="OrderDialogueModel.ModelDTO" OnValidSubmit="@OnSave">
         <DataAnnotationsValidator />
         <MatDialogTitle>@OrderDialogueModel.ActionType Order</MatDialogTitle>
-        <MatDialogContent>
-                <div class="margin-top-15">
+        <MatDialogContent class="width-500">
+            <div class="margin-top-15">
                 <p>
-                    <MatTextField @bind-Value="@OrderDialogueModel.ModelDTO.State" Label="State" Class="width-500"></MatTextField>
+                    <MatTextField @bind-Value="@OrderDialogueModel.ModelDTO.State" Label="State" FullWidth=true></MatTextField>
                     <ValidationMessage For="@(() => OrderDialogueModel.ModelDTO.State)" />
                 </p>
                 <p>
-                    <MatTextField @bind-Value="@OrderDialogueModel.ModelDTO.Name" Label="Name" Class="width-500"></MatTextField>
+                    <MatTextField @bind-Value="@OrderDialogueModel.ModelDTO.Name" Label="Name" FullWidth=true></MatTextField>
                     <ValidationMessage For="@(() => OrderDialogueModel.ModelDTO.Name)" />
                 </p>
             </div>
@@ -21,28 +21,4 @@
             <MatButton OnClick="@OnCancel">Cancel</MatButton>
         </MatDialogActions>
     </EditForm>
-
 </MatDialog>
-
-<style>
-    .margin-right-15
-    {
-        margin-right: 15px !important;
-    }
-    .margin-left-15
-    {
-        margin-left: 15px !important;
-    } 
-    .margin-top-15
-    {
-        margin-top: 15px !important;
-    }
-    .margin-bottom-15
-    {
-        margin-bottom: 15px !important;
-    }
-    .width-500
-    {
-        width: 500px !important;
-    }
-</style>
